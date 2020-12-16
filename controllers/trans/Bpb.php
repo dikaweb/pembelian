@@ -188,6 +188,7 @@ class bpb extends CI_Controller
         if ($pospk['id_ppn_pph'] == 3) {
             $nilai_pph = 0;
         }
+
         $data = [
             'no_bpb' => $no_penawaran,
             'no_urut' => $no_urut,
@@ -214,7 +215,7 @@ class bpb extends CI_Controller
         $this->db->insert('trans_bpb', $data);
         $row = $this->db->query('select max(id_bpb) as id_transaksi from trans_bpb')->row_array();
         $id_transaksi = $row['id_transaksi'];
-
+        $sdf = 33;
 
 
         $id_barang = $this->input->post('id_barang');
