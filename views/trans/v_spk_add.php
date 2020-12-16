@@ -124,7 +124,7 @@
                                     <option value=""></option>
                                     <option value="1">Include PPH</option>
                                     <option value="2">Exclude PPH</option>
-                                    <option value="3">Tanpa PPH</option>
+
                                 </select>
                             </div>
                         </div>
@@ -586,6 +586,14 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm-3">
+                        Kode
+                    </div>
+                    <div class="col-sm">
+                        <input type="text" class="form-control sm" id="kd_barang" name="kd_barang" autocomplete="off">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
                         Nama
                     </div>
                     <div class="col-sm">
@@ -603,6 +611,14 @@
                                 <option value="<?= $mc['id_satuan']; ?>"><?= $mc['nm_satuan']; ?></option>
                             <?php endforeach; ?>
                         </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        Kelompok
+                    </div>
+                    <div class="col-sm">
+                        <input type="text" class="form-control sm" id="kelompok" name="kelompok" autocomplete="off">
                     </div>
                 </div>
             </div>
@@ -733,7 +749,7 @@
         } else if ($('#txtid_rekanan1').val() == "") {
             alert("Pilih Dulu supplier");
         } else {
-            $('#barang-area').load("<?= base_url('trans/po/pilihbarang'); ?>");
+            $('#barang-area').load("<?= base_url('trans/po/pilihbarang/BARANG'); ?>");
             $('#barangModal').modal();
         };
     }
@@ -797,7 +813,10 @@
             url: "<?= base_url('trans/po/save_barang'); ?>",
             data: {
                 nm_barang: $('#nm_barang').val(),
+                kd_barang: $('#kd_barang').val(),
                 satuan: $('#satuan').val(),
+                jenis: 'JASA',
+                kelompok: $('#kelompok').val(),
             },
             method: "post",
             dataType: 'json',
@@ -811,7 +830,9 @@
             data: {
                 id_barang: $('#id_barang').val(),
                 nm_barang: $('#nm_barang').val(),
+                kd_barang: $('#kd_barang').val(),
                 satuan: $('#satuan').val(),
+                kelompok: $('#kelompok').val(),
             },
             method: "post",
             dataType: 'json',

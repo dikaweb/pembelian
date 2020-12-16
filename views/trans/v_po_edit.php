@@ -14,7 +14,7 @@
                 <a class="btn btn-info  col-sm-2 mt-1 btn-sm" href="<?= base_url('trans/po'); ?>">Kembali</a>
                 <a class="btn btn-info  col-sm-2 mt-1 btn-sm" id="baru" href="<?= base_url('trans/po/add'); ?>">baru</a>
                 <a class="btn btn-info  col-sm-2 mt-1 btn-sm" href="#" onclick="cetak()">Cetak</a>
-                <?php if ($konfirmasi_m['status'] < 3) { ?>
+                <?php if ($konfirmasi_m['status'] < 3 || $konfirmasi_m['status'] == 9) { ?>
                     <button type="submit" class="btn btn-info col-sm-2 btn-sm mt-1">Simpan</button>
                     <a href="#" class="btn btn-info col-sm-2 btn-sm mt-1" id="kirim" onclick="kirim()">Kirim</a>
                 <?php } ?>
@@ -392,7 +392,7 @@
                             </td>
                             <td style="width:10%">
                                 <h5>
-                                    <?php if ($konfirmasi_m['status'] < 3) { ?>
+                                    <?php if ($konfirmasi_m['status'] < 3 || $konfirmasi_m['status'] == 9) { ?>
                                         <?php if ($konfirmasi_m['id_user'] == $user['id']) { ?>
                                             <a href="#" class="badge bg-gradient-primary text-gray-100" onclick="tambahBarang()">Tambah</a>
                                         <?php } ?>
@@ -428,7 +428,7 @@
                             foreach ($konfirmasi_d as $mr) : ?>
                                 <tr>
                                     <td width="7%">
-                                        <?php if ($konfirmasi_m['status'] < 3) { ?>
+                                        <?php if ($konfirmasi_m['status'] < 3 || $konfirmasi_m['status'] == 9) { ?>
                                             <?php if ($konfirmasi_m['id_user'] == $user['id']) { ?>
                                                 <a href="#" class="badge badge-danger clastomboldel" data-id_detail="<?= $mr['id_detail']; ?>" data-nm_barang="<?= $mr['nm_barang']; ?>" data-jumlah="<?= $mr['jumlah']; ?>" data-id_transaksi="<?= $mr['id_transaksi']; ?>" data-toggle="modal" data-target="#deleteMenuModal">delete</a>
                                             <?php } ?>
@@ -437,7 +437,7 @@
                                     <td><?= $mr['nm_barang']; ?></td>
                                     <td><?= $mr['jumlah']; ?></td>
                                     <td><?= $mr['nm_satuan']; ?></td>
-                                    <td><?= $mr['harga']; ?></td>
+                                    <td><?= rp($mr['harga']); ?></td>
 
                                     <td><?php
                                         switch ($mr['jenis_reff']) {
@@ -640,7 +640,15 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm-3">
-                        Nama
+                        Kode
+                    </div>
+                    <div class="col-sm">
+                        <input type="text" class="form-control sm" id="kd_barang" name="kd_barang" autocomplete="off">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        Nama Barang
                     </div>
                     <div class="col-sm">
                         <input type="text" class="form-control sm" id="nm_barang" name="nm_barang" autocomplete="off">
@@ -657,6 +665,14 @@
                                 <option value="<?= $mc['id_satuan']; ?>"><?= $mc['nm_satuan']; ?></option>
                             <?php endforeach; ?>
                         </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        Kelompok
+                    </div>
+                    <div class="col-sm">
+                        <input type="text" class="form-control sm" id="kelompok" name="kelompok" autocomplete="off">
                     </div>
                 </div>
             </div>
@@ -877,6 +893,9 @@
             data: {
                 nm_barang: $('#nm_barang').val(),
                 satuan: $('#satuan').val(),
+                kd_barang: $('#kd_barang').val(),
+                jenis: 'BARANG',
+                kelompok: $('#kelompok').val(),
             },
             method: "post",
             dataType: 'json',
@@ -891,6 +910,8 @@
                 id_barang: $('#id_barang').val(),
                 nm_barang: $('#nm_barang').val(),
                 satuan: $('#satuan').val(),
+                kd_barang: $('#kd_barang').val(),
+                kelompok: $('#kelompok').val(),
             },
             method: "post",
             dataType: 'json',
@@ -953,7 +974,7 @@
         } else if ($('#txtid_rekanan1').val() == "") {
             alert("Pilih Dulu supplier");
         } else {
-            $('#barang-area').load("<?= base_url('trans/po/pilihbarang'); ?>");
+            $('#barang-area').load("<?= base_url('trans/po/pilihbarang0'); ?>");
             $('#barangModal').modal();
         };
     }

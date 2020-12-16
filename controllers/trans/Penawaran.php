@@ -22,7 +22,7 @@ class Penawaran extends CI_Controller
         $row = $this->db->get_where('user', ['username' => $this->session->userdata('usernamez')])->row_array();
         $id_company = $row['id_company'];
         $datenow = date("Y-m-d");
-        $dateawal = date('Y-m-d', strtotime('-45 days', strtotime($datenow)));
+        $dateawal = date('Y-m-d', strtotime('-20 days', strtotime($datenow)));
         $this->session->set_flashdata('messagex', $this->session->flashdata('messagey'));
         $this->session->set_flashdata('no_pr', $this->session->flashdata('no_pr'));
         $url = 'trans/penawaran/view/0/' . $dateawal . '/' . $datenow;

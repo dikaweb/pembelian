@@ -11,6 +11,16 @@ $tgl2 = strtotime($this->uri->segment(6));
 $tgl2 = date("m/d/Y", $tgl2);
 $tglrange = $tgl1  . " - " . $tgl2
 ?>
+<style type="text/css">
+    .contoh1 {
+        line-height: 10px;
+    }
+
+    .contoh2 {
+
+        line-height: 17px;
+    }
+</style>
 <input type="hidden" id="txt_company" value="<?= $this->uri->segment(4); ?>">
 <!-- Begin Page Content -->
 <div class="container-fluid">
@@ -49,6 +59,7 @@ $tglrange = $tgl1  . " - " . $tgl2
                             <th>Supplier</th>
                             <th>Status</th>
                             <th>PT</th>
+                            <th>Jenis Bayar</th>
                             <th>User</th>
                         </tr>
                     </thead>
@@ -62,13 +73,17 @@ $tglrange = $tgl1  . " - " . $tgl2
                                         <a href="#" class="badge badge-danger clastomboldel" data-status="<?= $mr['status']; ?>" data-user="<?= $mr['name']; ?>" data-lokasi="<?= $mr['nm_supplier']; ?>" data-id="<?= $mr['id_transaksi']; ?>" data-nomor="<?= $mr['no_transaksi']; ?>" data-tanggal="<?= $mr['tanggal']; ?>" data-toggle="modal" data-target="#deleteMenuModal">delete</a>
                                     <?php } ?>
                                 </td>
-                                <td><?= $mr['no_transaksi']; ?></td>
+                                <td>
+                                    <p class="contoh1">
+                                        <font size="2"> <?= $mr['no_transaksi']; ?></font>
+                                    </p>
+                                </td>
                                 <td><?= tgl_indo($mr['tanggal']); ?></td>
                                 <td><?= $mr['nm_supplier']; ?></td>
                                 <td><?php
+                                    $stat = '';
                                     if ($mr['is_upload'] == 1) {
                                         $path = base_url('assets/img/close.jpg');
-                                        $stat = '';
                                     } else {
                                         if ($mr['status'] == 1) {
                                             $path = base_url('assets/img/created.jpg');
@@ -95,6 +110,7 @@ $tglrange = $tgl1  . " - " . $tgl2
                                     <center><?= $stat ?></center>
                                 </td>
                                 <td><?= $mr['nm_company']; ?></td>
+                                <td><?= $mr['nm_jenis']; ?></td>
                                 <td><?= $mr['name']; ?></td>
                             </tr>
 
@@ -281,7 +297,7 @@ $tglrange = $tgl1  . " - " . $tgl2
             $('#nama').val(nama);
             $('#total').val(total);
             $('#idd').val(id);
-            if (status == 1 || status == 2) {
+            if (status == 1 || status == 2 || status == 9) {
                 $(":submit").show();
                 $('#lblinfo').text("");
             } else {

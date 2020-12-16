@@ -94,6 +94,7 @@ class spk_model extends CI_Model
                 'id_gudang' => $id_gudang,
                 'id_satuan' => $post['id_satuan'],
                 'jumlah' => $post['jumlah'],
+                'total' => $post['jumlah'] * $post['harga'],
                 'harga' => $post['harga'],
                 'jenis_reff' => $post['jenis_reff'],
                 'id_reff' => $post['id_reff'],
@@ -117,18 +118,58 @@ class spk_model extends CI_Model
             'up_sp' => $post['txtup'],
         ];
         $this->db->update('m_supplier', $data3, array('id_supplier' => $post["txtid_rekanan1"]));
-        $data = [
-            'no_transaksi' => $post['txtno_transaksi'],
-            'tanggal' => $post['tgl'],
-            'id_supplier' => $post['txtid_rekanan1'],
-            'note_po' => $post['txtnote_po'],
-            'up1' => $post['txtup'],
-            'id_ppn_pph' => $post['txt_pph'],
-            'keterangan' => $post['txt_keterangan'],
-            'keterangan2' => $post['txt_keterangan2'],
-            'jenis_bayar' => $post['txtjenis_bayar'],
-            'nilai_pph' => $post['nilai_pph'],
-        ];
+
+        $q11 = $this->db->get_where('trans_po', array('id_transaksi' =>  $post["txtid_transaksi"]))->row_array();
+        $id_ppn_pph = $q11['id_ppn_pph'];
+        $vnilai_pph_old =  $q11['nilai_pph'];
+        $vnilai_pph_new = $post['nilai_pph'];
+
+        if ($id_ppn_pph == $post['txt_ppn'] && $vnilai_pph_old == $vnilai_pph_new) {
+            $data = [
+                'no_transaksi' => $post['txtno_transaksi'],
+                'tanggal' => $post['tgl'],
+                'id_supplier' => $post['txtid_rekanan1'],
+                'note_po' => $post['txtnote_po'],
+                'up1' => $post['txtup'],
+                'id_ppn_pph' => $post['txt_pph'],
+                'keterangan' => $post['txt_keterangan'],
+                'keterangan2' => $post['txt_keterangan2'],
+                'jenis_bayar' => $post['txtjenis_bayar'],
+                'nilai_pph' => $post['nilai_pph'],
+            ];
+        } else {
+            $id_transaksi = $post["txtid_transaksi"];
+            $q1 = $this->db->query("select sum(total) as vtotal from trans_po_d where id_transaksi = $id_transaksi")->row_array();
+            $vtotal = $q1['vtotal'];
+
+            if ($post['txt_pph'] == 2) {
+                $vppnrp = (($vtotal * $vnilai_pph_new) / 100);
+                $vgrandtotal = $vtotal + $vppnrp;
+            } else if ($post['txt_pph'] == 1) {
+                $vgrandtotal = $vtotal;
+                $vtotal = ((100 / (100 + $vnilai_pph_new)) * $vtotal);
+                $vppnrp = $vgrandtotal - $vtotal;
+            } else if ($post['txt_pph'] == 3) {
+                $vppnrp = 0;
+                $vgrandtotal = $vtotal;
+            }
+
+            $data = [
+                'no_transaksi' => $post['txtno_transaksi'],
+                'tanggal' => $post['tgl'],
+                'id_supplier' => $post['txtid_rekanan1'],
+                'note_po' => $post['txtnote_po'],
+                'up1' => $post['txtup'],
+                'id_ppn_pph' => $post['txt_pph'],
+                'keterangan' => $post['txt_keterangan'],
+                'keterangan2' => $post['txt_keterangan2'],
+                'jenis_bayar' => $post['txtjenis_bayar'],
+                'nilai_pph' => $post['nilai_pph'],
+                'total' => $vtotal,
+                'ppnrp' => $vppnrp,
+                'grandtotal' => $vgrandtotal,
+            ];
+        }
         $this->db->update('trans_po', $data, array('id_transaksi' =>  $post["txtid_transaksi"]));
     }
 
@@ -145,6 +186,7 @@ class spk_model extends CI_Model
             'nm_barang' => $post['nm_barang'],
             'id_satuan' => $post['id_satuan'],
             'jumlah' => $post['jumlah'],
+            'total' => $post['jumlah'] * $post['harga'],
             'id_gudang' => $id_gudang,
             'harga' => $post['harga'],
             'jenis_reff' => $post['jenis_reff'],

@@ -196,7 +196,15 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm-3">
-                        Nama
+                        Kode
+                    </div>
+                    <div class="col-sm">
+                        <input type="text" class="form-control sm" id="kd_barang" name="kd_barang" autocomplete="off">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        Nama Barang
                     </div>
                     <div class="col-sm">
                         <input type="text" class="form-control sm" id="nm_barang" name="nm_barang" autocomplete="off">
@@ -264,6 +272,7 @@
             data: {
                 nm_barang: $('#nm_barang').val(),
                 satuan: $('#satuan').val(),
+                kd_barang: $('#kd_barang').val(),
             },
             method: "post",
             dataType: 'json',
@@ -278,6 +287,7 @@
                 id_barang: $('#id_barang').val(),
                 nm_barang: $('#nm_barang').val(),
                 satuan: $('#satuan').val(),
+                kd_barang: $('#kd_barang').val(),
             },
             method: "post",
             dataType: 'json',

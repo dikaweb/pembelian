@@ -4,6 +4,16 @@
 <!-- session dibawah ini diambil dari helper -->
 <input type="hidden" id="readon" value="<?= $this->session->flashdata('roz'); ?>">
 <input type="hidden" id="reado" value="<?= $this->session->flashdata('v_allz'); ?>">
+<style type="text/css">
+    .contoh1 {
+        line-height: 10px;
+    }
+
+    .contoh2 {
+
+        line-height: 17px;
+    }
+</style>
 <?php
 $tgl1 = strtotime($this->uri->segment(5));
 $tgl1 = date("m/d/Y", $tgl1);
@@ -49,26 +59,31 @@ $tglrange = $tgl1  . " - " . $tgl2
                             <th>Supplier</th>
                             <th>Status</th>
                             <th>PT</th>
+                            <th>Jenis Bayar</th>
                             <th>User</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($konfirmasi as $mr) : ?>
                             <tr>
-                                <td width="15%">
+                                <td>
                                     <a href="<?= base_url('trans/po/edit/') . $mr['id_transaksi']; ?>" class="badge badge-success clastomboledit">edit</a>
                                     <a href="#" class="badge bg-gradient-warning text-gray-100 clastombolview" data-id="<?= $mr['id_transaksi']; ?>">view</a>
                                     <?php if ($mr['id_user'] == $user['id']) { ?>
                                         <a href="#" class="badge badge-danger clastomboldel" data-status="<?= $mr['status']; ?>" data-user="<?= $mr['name']; ?>" data-lokasi="<?= $mr['nm_supplier']; ?>" data-id="<?= $mr['id_transaksi']; ?>" data-nomor="<?= $mr['no_transaksi']; ?>" data-tanggal="<?= $mr['tanggal']; ?>" data-toggle="modal" data-target="#deleteMenuModal">delete</a>
                                     <?php } ?>
                                 </td>
-                                <td><?= $mr['no_transaksi']; ?></td>
+                                <td>
+                                    <p class="contoh1">
+                                        <font size="2"> <?= $mr['no_transaksi']; ?></font>
+                                    </p>
+                                </td>
                                 <td><?= tgl_indo($mr['tanggal']); ?></td>
                                 <td><?= $mr['nm_supplier']; ?></td>
                                 <td><?php
+                                    $stat = '';
                                     if ($mr['is_upload'] == 1) {
                                         $path = base_url('assets/img/close.jpg');
-                                        $stat = '';
                                     } else {
                                         if ($mr['status'] == 1) {
                                             $path = base_url('assets/img/created.jpg');
@@ -95,6 +110,7 @@ $tglrange = $tgl1  . " - " . $tgl2
                                     <center><?= $stat ?></center>
                                 </td>
                                 <td><?= $mr['nm_company']; ?></td>
+                                <td><?= $mr['nm_jenis']; ?></td>
                                 <td><?= $mr['name']; ?></td>
                             </tr>
 
@@ -280,7 +296,7 @@ $tglrange = $tgl1  . " - " . $tgl2
             $('#nama').val(nama);
             $('#total').val(total);
             $('#idd').val(id);
-            if (status == 1 || status == 2) {
+            if (status == 1 || status == 2 || status == 9) {
                 $(":submit").show();
                 $('#lblinfo').text("");
             } else {

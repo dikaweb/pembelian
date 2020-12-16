@@ -38,6 +38,7 @@ class spk extends CI_Controller
         left join m_supplier b on a.id_supplier = b.id_supplier
         left join user c on a.id_user = c.id
         inner join m_company e on a.id_company = e.id_company
+        inner join jns_bayar f on a.jenis_bayar = f.id
         where jenis = 'SPK' and a.tanggal  between '$startDate' and '$endDate' 
          order by a.id_transaksi desc ";
             $data['kota'] = 'ALL';
@@ -46,6 +47,7 @@ class spk extends CI_Controller
         left join m_supplier b on a.id_supplier = b.id_supplier
         left join user c on a.id_user = c.id
         inner join m_company e on a.id_company = e.id_company
+        inner join jns_bayar f on a.jenis_bayar = f.id
         where  jenis = 'SPK' and a.id_company = $id_company and a.tanggal  between '$startDate' and '$endDate' 
          order by a.id_transaksi desc ";
             $data['dipilih'] = $this->db->get_where('m_company', ['id_company' => $id_company])->row_array();

@@ -38,6 +38,7 @@ class Po extends CI_Controller
         left join m_supplier b on a.id_supplier = b.id_supplier
         left join user c on a.id_user = c.id
         inner join m_company e on a.id_company = e.id_company
+        inner join jns_bayar f on a.jenis_bayar = f.id
         where  jenis = 'PO' and a.tanggal  between '$startDate' and '$endDate' 
         order by a.id_transaksi desc ";
             $data['kota'] = 'ALL';
@@ -46,6 +47,7 @@ class Po extends CI_Controller
         left join m_supplier b on a.id_supplier = b.id_supplier
         left join user c on a.id_user = c.id
         inner join m_company e on a.id_company = e.id_company
+        inner join jns_bayar f on a.jenis_bayar = f.id
         where  jenis = 'PO' and a.id_company = $id_company and a.tanggal  between '$startDate' and '$endDate' 
         order by a.id_transaksi desc ";
             $data['dipilih'] = $this->db->get_where('m_company', ['id_company' => $id_company])->row_array();
@@ -200,10 +202,12 @@ class Po extends CI_Controller
         $this->load->view('trans/v_modal_penawaran', $data);
     }
 
-    public function pilihbarang()
+
+    public function pilihbarang($selainjenis)
     {
         //ini dipakai
-        $query = "SELECT * FROM m_barang a inner join m_satuan b on a.id_satuan = b.id_satuan where is_active=1";
+
+        $query = "SELECT * FROM m_barang a inner join m_satuan b on a.id_satuan = b.id_satuan where jenis<>'$selainjenis' and status <> 'TIDAK AKTIF' ORDER BY NM_BARANG";
         $data['barang'] = $this->db->query($query)->result_array();
         $this->load->view('trans/v_po_modal_barang', $data);
     }
@@ -439,5 +443,42 @@ class Po extends CI_Controller
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         $writer->save('php://output');
+    }
+
+
+    function get_data_barang()
+    {
+        $this->load->model('trans/Barang_model');
+        $list = $this->Barang_model->get_datatables();
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($list as $rows) { {
+
+                $data[] = array(
+
+                    '<button id="btnmdlpilihbarang" class="badge-primary" data-nm="' . $rows->nm_barang . '" data-id="' . $rows->id_barang . '" data-dismiss="modal">Pilih</button>
+                    ',
+                    $rows->kd_barang,
+                    $rows->nm_barang,
+                    $rows->nm_satuan,
+                    $rows->kelompok
+                );
+            }
+        }
+
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->Barang_model->count_all(),
+            "recordsFiltered" => $this->Barang_model->count_filtered(),
+            "data" => $data,
+        );
+        //output dalam format JSON
+        echo json_encode($output);
+    }
+
+    public function pilihbarang0()
+    {
+        //ini dipakai
+        $this->load->view('trans/v_modal_barang_serverside');
     }
 }

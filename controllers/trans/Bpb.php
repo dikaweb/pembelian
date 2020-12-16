@@ -200,7 +200,16 @@ class bpb extends CI_Controller
             'jenis' => $jenis,
             'ket_nv' => $pospk['note_po'],
             'id_gudang' =>  $id_gudang,
-            'tahun' => $tahun
+            'tahun' => $tahun,
+            'kodebiaya' => $pospk['kodebiaya'],
+            'kodesup' => $pospk['kodesup'],
+            'kodelokasi' => $pospk['kodelokasi'],
+            'tampilkodebiaya' => $pospk['tampilkodebiaya'],
+            'tampilkodesup' => $pospk['tampilkodesup'],
+            'tampilkodelokasi' => $pospk['tampilkodelokasi'],
+            'id_db' => $pospk['id_db'],
+            'no_nv' => $pospk['no_nv'],
+
         ];
         $this->db->insert('trans_bpb', $data);
         $row = $this->db->query('select max(id_bpb) as id_transaksi from trans_bpb')->row_array();

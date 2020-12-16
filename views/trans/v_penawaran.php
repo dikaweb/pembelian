@@ -231,14 +231,15 @@ $tglrange = $tgl1  . " - " . $tgl2
             })
         }
         // `d` is the original data object for the row
-        return '<center><b><u>' + d[0].no_permintaan + '</u></b><table width="90%" class="kecil">' +
-            '<th>Aksi</th>' +
-            '<th>Item</th>' +
-            '<th>Jml Penawaran</th>' +
-            '<th>Data Penawaran</th>' +
-            '<th>PO/SPK</th>' +
+        // '<center><b><u>' + d[0].no_permintaan + '</u></b>
+        return '<table width="90%" class="kecil">' +
+        '<th>Aksi</th>' +
+        '<th>Item</th>' +
+        '<th>Jml Penawaran</th>' +
+        '<th>Data Penawaran</th>' +
+        '<th>PO/SPK</th>' +
 
-            trs +
+        trs +
             '</table><center>';
     }
 
@@ -255,7 +256,7 @@ $tglrange = $tgl1  . " - " . $tgl2
             scrollCollapse: true,
             paging: false,
             "columnDefs": [{
-                "targets": [2, 9],
+                "targets": [9],
                 "visible": false,
             }],
             'fnDrawCallback': function(oSettings) {

@@ -23,7 +23,7 @@ date_default_timezone_set('Asia/Jakarta');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://penawaran.labanraya.com:888';
+$config['base_url'] = 'https://penawaran.labanraya.com:8888';
 
 /*
 |--------------------------------------------------------------------------

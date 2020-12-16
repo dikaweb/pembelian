@@ -113,11 +113,15 @@
                                     <label for="basic-url">Pilih gambar</label>
                                 </div>
                                 <div class="col-sm-7  input-group input-group-sm">
+                                    <a href="" data-toggle="modal" data-target="#fotoModal" data-nm_jenis="customer" data-nama="Foto Dokumen" class=" badge badge-success clastombolfoto">...</a>
+
+                                </div>
+                                <!-- <div class="col-sm-7  input-group input-group-sm">
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" name="is_sp" id="is_sp" accept=".jpg,.jpeg" required="required">
                                         <label class="custom-file-label border border-primary" for="is_sp" required="required">Choose file</label>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="form-group row row-table ml-1 mt-n2 mb-n2">
                                 <div class="col-sm-2">
@@ -199,6 +203,102 @@
 
 </body>
 </form>
+
+<!-- ------------------------------------------------------------------Modal Foto------------------------------------------ -->
+
+<div class="modal fade" id="fotoModal" tabindex="-1" role="dialog" aria-labelledby="fotoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fotoModalLabel">te</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- DataTables Example -->
+            <div class="card shadow mb-1" id="foto-area">
+                <style>
+                    input {
+                        margin-top: 1px;
+                    }
+
+                    @media handheld and (orientation: landscape) {
+                        .wrapper {
+                            position: relative;
+                            width: 320px;
+                            height: 240px;
+                            -moz-user-select: none;
+                            -webkit-user-select: none;
+                            -ms-user-select: none;
+                            user-select: none;
+                        }
+
+                        .signature-pad {
+                            position: absolute;
+                            left: 0;
+                            top: 0;
+                            width: 320px;
+                            height: 240px;
+                        }
+                    }
+
+                    @media handheld and (orientation: portrait) {
+                        .wrapper {
+                            position: relative;
+                            width: 240px;
+                            height: 320px;
+                            -moz-user-select: none;
+                            -webkit-user-select: none;
+                            -ms-user-select: none;
+                            user-select: none;
+                        }
+
+                        .signature-pad {
+                            position: absolute;
+                            left: 0;
+                            top: 0;
+                            width: 240px;
+                            height: 320px;
+                        }
+                    }
+                </style>
+                <div class="card shadow mb-1" id="foto-area">
+                    <div class="card-body">
+                        <form method="POST" onsubmit="simpan()">
+
+                            <input type="hidden" name="datauri" id="datauri">
+                            <p>Ambil Gambar</p>
+                            <div>
+                                <div id="camera">
+                                </div>
+                                <div class="wrapper" id="idsignature">
+                                    <canvas id="signature-pad" class="signature-pad"></canvas>
+                                </div>
+                            </div>
+                            <div id="webcam">
+                                <input type=button value="Foto" onClick="preview()">
+                            </div>
+                            <div id="simpan" style="display:none">
+                                <input type=button value="Ulangi" onClick="batal()">
+                                <input type=button value="Upload" onClick="upload()">
+                                <input type=button value="Hapus tanda" onClick="undo()">
+                            </div>
+
+                        </form>
+                        <div>
+
+
+                        </div>
+
+                        <div id="hasil"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="<?= base_url('assets/'); ?>vendor/jquery/jquery.min.js"></script>
 <script src="<?= base_url('assets/'); ?>vendor/jquery/jquery.mask.js"></script>
 <script src="<?= base_url('assets/'); ?>vendor/datepicker/js/bootstrap-datepicker.min.js"></script>
@@ -213,6 +313,8 @@
 <script src="<?= base_url('assets/'); ?>vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 <script src="<?= base_url('assets/'); ?>js/v_po.js"></script>
+<script src="<?= base_url('assets/'); ?>js/signature_pad.min.js"></script>
+<script src="<?= base_url('assets/'); ?>vendor/jquery/webcam.js"></script>
 <!---------------------------------------------------- Date Picture-------------------------------------------- -->
 <script type="text/javascript">
     $(function() {
@@ -223,6 +325,52 @@
             language: 'id'
         })
         $('#tgl_awal').datepicker('setDate', new Date($('#tgl').val()));
+
+        $('.clastombolfoto').on('click', function() {
+            //console.log($(this).data('id'));
+            $('#fotoModalLabel').text($(this).data('nama'));
+            // $.ajax({
+            //     url: "<?= base_url('input/insp_rutin/set_id_inspection_d'); ?>",
+            //     data: {
+            //         id: $(this).data('id'),
+            //         nm_file: $(this).data('nm_file'),
+            //         nm_jenis: $(this).data('nm_jenis')
+            //     },
+            //     method: "post",
+            //     dataType: 'json',
+            //     success: function(data) {
+
+            //     },
+            // });
+
+            $("#foto-area").show();
+            Webcam.unfreeze();
+            document.getElementById('webcam').style.display = '';
+            document.getElementById('simpan').style.display = 'none';
+            if (screen.height <= screen.width) {
+                // Landscape
+                Webcam.set({
+                    width: 320,
+                    height: 240,
+                });
+
+            } else {
+                // Portrait
+                Webcam.set({
+                    width: 240,
+                    height: 320,
+                });
+            }
+            Webcam.set({
+                image_format: 'jpeg',
+                jpeg_quality: 100,
+                constraints: {
+                    video: true,
+                    facingMode: "environment"
+                }
+            });
+            Webcam.attach('#camera');
+        });
     });
 </script>
 
@@ -232,4 +380,131 @@
         let fileName = $(this).val().split('\\').pop();
         $(this).next('.custom-file-label').addClass("selected").html(fileName);
     });
+</script>
+
+<script language="Javascript">
+    $("#idsignature").hide();
+    // konfigursi webcam
+    var signaturePad = new SignaturePad(document.getElementById('signature-pad'), {
+        penColor: 'rgb(255, 0, 0)'
+    });
+
+    function undo() {
+        var canvas = document.getElementById("signature-pad"),
+            ctx = canvas.getContext("2d");
+
+        if (screen.height <= screen.width) {
+            canvas.width = 320;
+            canvas.height = 240;
+        } else {
+            canvas.width = 240;
+            canvas.height = 320;
+        }
+
+
+        data = $('#datauri').val();
+
+        var background = new Image();
+        background.src = data;
+        background.onload = function() {
+            ctx.drawImage(background, 0, 0);
+        }
+    }
+
+
+    function foto() {
+        $("#is_foto-area").hide();
+        $("#foto-area").show();
+        Webcam.unfreeze();
+        document.getElementById('webcam').style.display = '';
+        document.getElementById('simpan').style.display = 'none';
+        if (screen.height <= screen.width) {
+            // Landscape
+            Webcam.set({
+                width: 320,
+                height: 240,
+            });
+
+        } else {
+            // Portrait
+            Webcam.set({
+                width: 240,
+                height: 320,
+
+            });
+        }
+        Webcam.set({
+            image_format: 'jpeg',
+            jpeg_quality: 100,
+            //force_flash: true,
+            constraints: {
+                video: true,
+                facingMode: "environment"
+            }
+        });
+        Webcam.attach('#camera');
+    }
+
+    function upload() {
+        $("#loadMe").modal({
+            backdrop: "static", //remove ability to close modal with click
+            keyboard: false, //remove option to close with keyboard
+            show: true //Display loader!
+        });
+        var data = signaturePad.toDataURL('image/png');
+
+        //console.log(data);
+        Webcam.upload(data, '<?= base_url('input/insp_rutin/upload_list_inspeksi'); ?>', function(code, text) {});
+        setTimeout(function() {
+            //url = "<?= base_url('input/insp_rutin/edit/'); ?>" + $('#id_inspection').val();
+            //window.location.replace(url);
+            $("#target").submit();
+        }, 3500);
+    }
+
+    function preview() {
+        $('#camera').hide();
+        $("#idsignature").show();
+        // untuk preview gambar sebelum di upload
+        Webcam.freeze();
+        // ganti display webcam menjadi none dan simpan menjadi terlihat
+        document.getElementById('webcam').style.display = 'none';
+        document.getElementById('simpan').style.display = '';
+
+        var canvas = document.getElementById("signature-pad"),
+            ctx = canvas.getContext("2d");
+
+        if (screen.height <= screen.width) {
+            canvas.width = 320;
+            canvas.height = 240;
+        } else {
+            canvas.width = 240;
+            canvas.height = 320;
+        }
+
+        Webcam.snap(function(data_uri) {
+            data = data_uri;
+        });
+        var background = new Image();
+        background.src = data;
+        background.onload = function() {
+            ctx.drawImage(background, 0, 0);
+        }
+        $('#datauri').val(data);
+    }
+
+    function batal() {
+        // batal preview
+        $('#camera').show();
+        $("#idsignature").hide();
+        Webcam.unfreeze();
+        // ganti display webcam dan simpan seperti semula
+        document.getElementById('webcam').style.display = '';
+        document.getElementById('simpan').style.display = 'none';
+    }
+
+    function openModalpenerima() {
+        $('#penerima-area').load("<?= base_url('input/insp_rutin/pilih_customer/edit'); ?>");
+        $('#penerimaModal').modal();
+    }
 </script>
