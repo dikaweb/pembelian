@@ -74,6 +74,7 @@ class spk_model extends CI_Model
                 'keterangan2' => $post['txt_keterangan2'],
                 'jenis_bayar' => $post['txtjenis_bayar'],
                 'id_company' => $post['id_company'],
+                'id_lokasi_penerima' => $post['id_lokasi_penerima'],
                 'id_ppn_pph' => $post['pph'],
                 'nilai_pph' => $post['nilai_pph'],
                 'tahun' => $tahun,
@@ -136,6 +137,7 @@ class spk_model extends CI_Model
                 'keterangan2' => $post['txt_keterangan2'],
                 'jenis_bayar' => $post['txtjenis_bayar'],
                 'nilai_pph' => $post['nilai_pph'],
+                'id_lokasi_penerima' => $post['id_lokasi_penerima'],
             ];
         } else {
             $id_transaksi = $post["txtid_transaksi"];
@@ -168,6 +170,7 @@ class spk_model extends CI_Model
                 'total' => $vtotal,
                 'ppnrp' => $vppnrp,
                 'grandtotal' => $vgrandtotal,
+                'id_lokasi_penerima' => $post['id_lokasi_penerima'],
             ];
         }
         $this->db->update('trans_po', $data, array('id_transaksi' =>  $post["txtid_transaksi"]));

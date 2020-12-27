@@ -38,7 +38,7 @@
         scrollY: '50vh',
         scrollX: true,
         scrollCollapse: true,
-        paging: true
+        paging: false
     });
 
     $(document).on('shown.bs.modal', '.modal', function() {

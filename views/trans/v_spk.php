@@ -72,6 +72,8 @@ $tglrange = $tgl1  . " - " . $tgl2
                                     <?php if ($mr['id_user'] == $user['id']) { ?>
                                         <a href="#" class="badge badge-danger clastomboldel" data-status="<?= $mr['status']; ?>" data-user="<?= $mr['name']; ?>" data-lokasi="<?= $mr['nm_supplier']; ?>" data-id="<?= $mr['id_transaksi']; ?>" data-nomor="<?= $mr['no_transaksi']; ?>" data-tanggal="<?= $mr['tanggal']; ?>" data-toggle="modal" data-target="#deleteMenuModal">delete</a>
                                     <?php } ?>
+                                    <a href="#" class="badge badge-success clastombollokasi" data-id="<?= $mr['id_transaksi']; ?>">Lok Penerima</a>
+
                                 </td>
                                 <td>
                                     <p class="contoh1">
@@ -193,6 +195,25 @@ $tglrange = $tgl1  . " - " . $tgl2
     </div>
 </div>
 
+
+<!-- ------------------------------------------------------------------Modal Edit Lokasi Penerima------------------------------------------- -->
+
+<div class="modal fade" id="lokasiModal" tabindex="-1" role="dialog" aria-labelledby="lokasiModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="lokasiModalLabel">Edit Lokasi Penerima</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- DataTables Example -->
+            <div class="card shadow mb-4" id="lokasi-area">
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- ------------------------------------------------------------------Modal Legend------------------------------------------- -->
 
 <div class="modal fade" id="legendModal" tabindex="-1" role="dialog" aria-labelledby="legendModalLabel" aria-hidden="true">
@@ -310,6 +331,12 @@ $tglrange = $tgl1  . " - " . $tgl2
             $id_trans = $(this).data('id');
             $('#view-area').load("<?= base_url('trans/spk/modal_view/'); ?>" + $id_trans);
             $('#viewModal').modal();
+        });
+
+        $('.clastombollokasi').on('click', function() {
+            $id_trans = $(this).data('id');
+            $('#lokasi-area').load("<?= base_url('no_logged/modal_lokasi/spk/'); ?>" + $id_trans);
+            $('#lokasiModal').modal();
         });
     });
 

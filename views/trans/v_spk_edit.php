@@ -157,7 +157,23 @@
                                 <input type="text" class="form-control border border-primary" name="txtnote_po" id="txtnote_po" autocomplete="off" value="<?= $konfirmasi_m['note_po']; ?>">
                             </div>
                         </div>
+                        <div class="form-group row row-table ml-1 mt-1 mb-n1">
+                            <div class="col-sm-2 ml-n1">
+                                <label for="basic-url">Lokasi Penerima </label>
+                            </div>
 
+                            <div class="col-md col-table  input-group input-group-sm mb-1">
+                                <select class="form-control border border-primary" name="id_lokasi_penerima" id="id_lokasi_penerima" required="required">
+                                    <option></option>
+                                    <?php foreach ($lokasi_penerima as $mc) : ?>
+                                        <option value="<?= $mc['id']; ?>" <?php if ($konfirmasi_m['id_lokasi_penerima'] == $mc['id']) {
+                                                                                echo "selected";
+                                                                            } ?>><?= $mc['lokasi']; ?> || <?= $mc['kota_kab']; ?> || <?= $mc['province']; ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

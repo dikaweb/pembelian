@@ -25,15 +25,18 @@ if ($master['status'] < 3 or $master['status'] == 9) {
 </table>';
 }
 $html .= '
+
+
+
 <table cellspacing="0" width="100%" cellpadding="0" border="0">
   <tr>
-  <!--
+  
     <td><div align="center"><img src="/assets/img/logo/' . $master['kode_c'] . '.png"></div></td>
   </tr>
   <tr>
     <td><div align="center"><font size="14"><strong>' . $master['nm_company'] . '
     </strong></font><br><hr height="3" /></div></td>
-  -->
+  
   <td><br><br><br><br><br><br><br><br><br><br></td>
     </tr>
 </table>

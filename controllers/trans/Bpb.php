@@ -66,14 +66,14 @@ class bpb extends CI_Controller
         $data['title'] = 'Serah Terima PO/SPK';
         $row = $this->db->get_where('user', ['username' => $this->session->userdata('usernamez')])->row_array();
         $data['user'] = $row;
+        $id_lokasi_penerima = $row['lokasi_id'];
         $query = " 
-        
         select a.jenis,b.nm_supplier as nm_supplier,a.id_transaksi as id_transaksi, a.no_transaksi as no_transaksi,
         a.tanggal as tanggal,c.kode_c as nm_company,a.id_company,a.id_supplier
         from trans_po a
         left join m_supplier b on a.id_supplier = b.id_supplier
         inner join m_company c on a.id_company = c.id_company
-        where status in(3,4)
+        where status in(3,4) and id_lokasi_penerima = $id_lokasi_penerima
          ";
 
 
@@ -199,23 +199,15 @@ class bpb extends CI_Controller
             'id_user' => $this->session->userdata('id_loginz'),
             'id_company' => $id_company,
             'jenis' => $jenis,
-            'ket_nv' => $pospk['note_po'],
             'id_gudang' =>  $id_gudang,
             'tahun' => $tahun,
-            'kodebiaya' => $pospk['kodebiaya'],
-            'kodesup' => $pospk['kodesup'],
-            'kodelokasi' => $pospk['kodelokasi'],
-            'tampilkodebiaya' => $pospk['tampilkodebiaya'],
-            'tampilkodesup' => $pospk['tampilkodesup'],
-            'tampilkodelokasi' => $pospk['tampilkodelokasi'],
-            'id_db' => $pospk['id_db'],
-            'no_nv' => $pospk['no_nv'],
+            'is_voucher' => $pospk['is_voucher'],
 
         ];
         $this->db->insert('trans_bpb', $data);
         $row = $this->db->query('select max(id_bpb) as id_transaksi from trans_bpb')->row_array();
         $id_transaksi = $row['id_transaksi'];
-        $sdf = 33;
+
 
 
         $id_barang = $this->input->post('id_barang');

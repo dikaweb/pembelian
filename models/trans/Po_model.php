@@ -74,6 +74,7 @@ class po_model extends CI_Model
                 'up1' => $post['txtup'],
                 'nilai_pph' => 10,
                 'id_company' => $id_company,
+                'id_lokasi_penerima' => $post['id_lokasi_penerima'],
                 'id_ppn_pph' => $post['ppn'],
                 'jenis' => 'PO',
                 'tahun' => $tahun
@@ -148,6 +149,7 @@ class po_model extends CI_Model
                 'keterangan' => $post['txt_keterangan'],
                 'keterangan2' => $post['txt_keterangan2'],
                 'jenis_bayar' => $post['txtjenis_bayar'],
+                'id_lokasi_penerima' => $post['id_lokasi_penerima'],
             ];
         } else {
             $id_transaksi = $post["txtid_transaksi"];
@@ -179,6 +181,7 @@ class po_model extends CI_Model
                 'total' => $vtotal,
                 'ppnrp' => $vppnrp,
                 'grandtotal' => $vgrandtotal,
+                'id_lokasi_penerima' => $post['id_lokasi_penerima'],
             ];
         }
         $this->db->update('trans_po', $data, array('id_transaksi' =>  $post["txtid_transaksi"]));

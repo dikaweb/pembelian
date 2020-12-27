@@ -112,16 +112,16 @@
                                 <div class="col-sm-2">
                                     <label for="basic-url">Pilih gambar</label>
                                 </div>
-                                <div class="col-sm-7  input-group input-group-sm">
+                                <!-- <div class="col-sm-7  input-group input-group-sm">
                                     <a href="" data-toggle="modal" data-target="#fotoModal" data-nm_jenis="customer" data-nama="Foto Dokumen" class=" badge badge-success clastombolfoto">...</a>
 
-                                </div>
-                                <!-- <div class="col-sm-7  input-group input-group-sm">
+                                </div> -->
+                                <div class="col-sm-7  input-group input-group-sm">
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" name="is_sp" id="is_sp" accept=".jpg,.jpeg" required="required">
                                         <label class="custom-file-label border border-primary" for="is_sp" required="required">Choose file</label>
                                     </div>
-                                </div> -->
+                                </div>
                             </div>
                             <div class="form-group row row-table ml-1 mt-n2 mb-n2">
                                 <div class="col-sm-2">

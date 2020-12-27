@@ -18,9 +18,9 @@ class spk extends CI_Controller
 
     public function index()
     {
-        $data['user'] = $this->db->get_where('user', ['username' => $this->session->userdata('usernamez')])->row_array();
-        $row = $this->db->get_where('user', ['username' => $this->session->userdata('usernamez')])->row_array();
-        $id_company = $row['id_company'];
+        // $data['user'] = $this->db->get_where('user', ['username' => $this->session->userdata('usernamez')])->row_array();
+        // $row = $this->db->get_where('user', ['username' => $this->session->userdata('usernamez')])->row_array();
+        // $id_company = $row['id_company'];
         $datenow = date("Y-m-d");
         $dateawal = date('Y-m-d', strtotime('-90 days', strtotime($datenow)));
         $url = 'trans/spk/view/0/' . $dateawal . '/' . $datenow;
@@ -75,7 +75,7 @@ class spk extends CI_Controller
         $data['barang'] = $this->db->get('m_barang')->result_array();
         $data['m_company'] = $this->db->get('m_company')->result_array();
         $data['m_satuan'] = $this->db->get('m_satuan')->result_array();
-
+        $data['lokasi_penerima'] = $this->db->get('lokasi')->result_array();
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar', $data);
         $this->load->view('templates/topbar', $data);
@@ -92,7 +92,7 @@ class spk extends CI_Controller
 
         $data['m_satuan'] = $this->db->get('m_satuan')->result_array();
         $data['barang'] = $this->db->get('m_barang')->result_array();
-
+        $data['lokasi_penerima'] = $this->db->get('lokasi')->result_array();
         $data['konfirmasi_m'] = $this->spk_model->konfirmasi_m($id_transaksi);
         $data['konfirmasi_d'] = $this->spk_model->konfirmasi_d($id_transaksi);
 

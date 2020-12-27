@@ -144,4 +144,28 @@ class no_logged extends CI_Controller
         $data['jenis'] = $jenis;
         $this->load->view('trans/v_modal_pr', $data);
     }
+
+    public function modal_lokasi($pospk, $id_transaksi)
+    {
+        $this->load->model("trans/po_model");
+        $data['lokasi_penerima'] = $this->db->get('lokasi')->result_array();
+        $data['pospk'] = $pospk;
+        $data['konfirmasi_m'] = $this->po_model->konfirmasi_m($id_transaksi);
+        $this->load->view('trans/v_po_modal_lokasi', $data);
+    }
+    public function update_lokasi()
+    {
+        $post = $this->input->post();
+        $data = [
+            'id_lokasi_penerima' => $post['id_lokasi_penerima'],
+        ];
+        $this->db->update('trans_po', $data, array('id_transaksi' =>  $post["id_transaksi"]));
+
+        if ($post["pospk"] == 'po') {
+            $url = 'trans/po';
+        } else {
+            $url = 'trans/spk';
+        }
+        redirect($url);
+    }
 }

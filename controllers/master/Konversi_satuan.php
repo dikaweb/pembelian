@@ -22,7 +22,7 @@ class konversi_satuan extends CI_Controller
         $this->load->view('templates/sidebar', $data);
         $this->load->view('templates/topbar', $data);
         $this->load->view('master/v_konversi_satuan', $data);
-        $this->load->view('templates/footer');
+        //$this->load->view('templates/footer');
     }
 
     public function edit($id_barang)
@@ -122,5 +122,24 @@ class konversi_satuan extends CI_Controller
         $kecil = $rw['kecil'];
         $this->db->query("update m_barang set id_satuan = $kecil where id_barang = $id_barang");
         redirect('master/konversi_satuan/edit/' . $this->input->post('txtid_barang'));
+    }
+
+    public function modal_view($id_barang)
+    {
+        $data['m_satuan'] = $this->db->get('m_satuan')->result_array();
+        $data['brg'] = $this->db->query("select * from m_barang a inner join m_satuan b on a.id_satuan = b.id_satuan where id_barang = $id_barang")->row_array();
+        $this->load->view('master/v_konversi_satuan_modal', $data);
+    }
+
+    public function update_barang()
+    {
+        $this->kd_barang = trim(htmlspecialchars($this->input->post('kd_barang')));
+        $this->nm_barang = trim(htmlspecialchars($this->input->post('nm_barang')));
+        $this->jenis = trim(htmlspecialchars($this->input->post('jenis')));
+        $this->kelompok = trim(htmlspecialchars($this->input->post('kelompok')));
+        $this->status = trim(htmlspecialchars($this->input->post('status')));
+        $this->db->update('m_barang', $this, ['id_barang' => $this->input->post('id_barang')]);
+        $url = 'master/konversi_satuan';
+        redirect($url);
     }
 }

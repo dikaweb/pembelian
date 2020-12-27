@@ -144,6 +144,21 @@
                                 <input type="text" class="form-control border border-primary" name="txtnote_po" id="txtnote_po" autocomplete="off">
                             </div>
                         </div>
+                        <div class="form-group row row-table ml-1 mt-1 mb-n1">
+                            <div class="col-sm-2 ml-n1">
+                                <label for="basic-url">Lokasi Penerima </label>
+                            </div>
+
+                            <div class="col-md col-table  input-group input-group-sm mb-1">
+                                <select class="form-control border border-primary" name="id_lokasi_penerima" id="id_lokasi_penerima" required="required">
+                                    <option></option>
+                                    <?php foreach ($lokasi_penerima as $mc) : ?>
+                                        <option value="<?= $mc['id']; ?>"><?= $mc['lokasi']; ?> || <?= $mc['kota_kab']; ?> || <?= $mc['province']; ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -854,6 +869,13 @@
             return true;
         }
 
+        if ($('#id_lokasi_penerima').val() == "") {
+            alert("Pilih Lokasi penerima terlebih dahulu");
+            $('#btntambah').show();
+            return true;
+        }
+
+
         if (!$('input[type="radio"]').is(':checked')) {
             alert("Silahkan Pilih Referensi");
             $('#btntambah').show();
@@ -924,6 +946,7 @@
             return true;
         }
 
+
         if ($('#txt_harga-error').html() == "Format angka salah") {
             alert("Edit dulu format angka yang salah pada kolom harga");
             $('#btntambah').show();
@@ -958,6 +981,7 @@
                 jumlah: parseFloat($('#txt_jumlah').val()),
                 harga: parseFloat($('#txt_harga').val()),
                 id_company: $('#txt_company').val(),
+                id_lokasi_penerima: $('#id_lokasi_penerima').val(),
                 jenis_reff: jenis_reff,
                 id_reff: id_reff
             },
