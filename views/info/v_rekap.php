@@ -67,7 +67,7 @@ $tglrange = $tgl1  . " - " . $tgl2
                         <?php foreach ($konfirmasi as $mr) : ?>
                             <tr>
                                 <td>
-                                    <a href="<?= base_url('trans/po/edit/') . $mr['id_transaksi']; ?>" class="badge badge-success clastomboledit">edit</a>
+                                    <!-- <a href="<?= base_url('trans/po/edit/') . $mr['id_transaksi']; ?>" class="badge badge-success clastomboledit">edit</a> -->
                                     <!-- <a href="#" class="badge bg-gradient-warning text-gray-100 clastombolview" data-id="<?= $mr['id_transaksi']; ?>">view</a> -->
                                 </td>
                                 <td><?= $mr['nm_company']; ?></td>
