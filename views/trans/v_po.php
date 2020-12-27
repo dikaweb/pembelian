@@ -83,31 +83,34 @@ $tglrange = $tgl1  . " - " . $tgl2
                                 <td><?= $mr['nm_supplier']; ?></td>
                                 <td><?php
                                     $stat = '';
-                                    if ($mr['is_upload'] == 1) {
-                                        $path = base_url('assets/img/close.jpg');
+
+                                    if ($mr['status'] == 1) {
+                                        $path = base_url('assets/img/created.jpg');
+                                        $stat = '1/5';
+                                    } else if ($mr['status'] == 2) {
+                                        $path = base_url('assets/img/submitted.jpg');
+                                        $stat = '2/5';
+                                    } else if ($mr['status'] == 9) {
+                                        $path = base_url('assets/img/void.jpg');
+                                        echo "Note Void : " . $mr['note_void'] . "<br>";
+                                    } else if ($mr['status'] == 3) {
+                                        $path = base_url('assets/img/approved.jpg');
+                                        $stat = '3/5';
+                                    } else if ($mr['status'] == 4) {
+                                        $path = base_url('assets/img/progress.jpg');
+                                        $stat = '4/5';
                                     } else {
-                                        if ($mr['status'] == 1) {
-                                            $path = base_url('assets/img/created.jpg');
-                                            $stat = '1/6';
-                                        } else if ($mr['status'] == 2) {
-                                            $path = base_url('assets/img/submitted.jpg');
-                                            $stat = '2/6';
-                                        } else if ($mr['status'] == 9) {
-                                            $path = base_url('assets/img/void.jpg');
-                                            echo "Note Void : " . $mr['note_void'] . "<br>";
-                                        } else if ($mr['status'] == 3) {
-                                            $path = base_url('assets/img/approved.jpg');
-                                            $stat = '3/6';
-                                        } else if ($mr['status'] == 4) {
-                                            $path = base_url('assets/img/progress.jpg');
-                                            $stat = '4/6';
-                                        } else {
-                                            $path = base_url('assets/img/complete.jpg');
-                                            $stat = '5/6';
-                                        }
+                                        $path = base_url('assets/img/delivered.jpg');
+                                        $stat = '5/5';
                                     }
+
                                     ?>
-                                    <img src="<?= $path; ?>" type="image/jpeg" width="80">
+                                    <center><img src="<?= $path; ?>" type="image/jpeg" width="80"></center>
+
+                                    <?php if ($mr['is_voucher'] == 1) {
+                                        $path = base_url('assets/img/voucher.jpg'); ?>
+                                        <center><img src="<?= $path; ?>" type="image/jpeg" width="80"></center>
+                                    <?php }; ?>
                                     <center><?= $stat ?></center>
                                 </td>
                                 <td><?= $mr['nm_company']; ?></td>

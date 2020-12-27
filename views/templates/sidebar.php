@@ -97,7 +97,7 @@
 
                                 if ($sm['sub_menu_id'] == 63) :
 
-                                    $c = $this->db->query('select * from trans_po where status < 6 and is_upload < 2 ')->num_rows();
+                                    $c = $this->db->query('select * from trans_po where status <> 5 and is_voucher <> 1 ')->num_rows();
 
                                     if ($c <> 0) :
                                         echo "(";
