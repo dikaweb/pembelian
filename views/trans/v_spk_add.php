@@ -40,6 +40,17 @@
                                 <span class="text-body" id="lblalamat1"></span>
                             </div>
                         </h6>
+                        <div class="row ">
+                            <div class="col-sm-2 mt-1 ml-2">
+                                <label for="basic-url">PIC </label>
+                            </div>
+
+                            <div class="col-sm-9 mt-1 input-group input-group-sm">
+                                <label>:&nbsp;</label>
+                                <input type="text" class="form-control border border-primary" name="txtup" id="txtup" autocomplete="off">
+
+                            </div>
+                        </div>
 
                         <div class="row">
                             <div class="col-sm-2 mt-3 ml-2">
@@ -95,17 +106,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group row row-table ml-1 mt-1 ">
-                            <div class="col-sm-1 ml-n1 mt-1 ">
-                                <label for="basic-url">CP </label>
-                            </div>
 
-                            <div class="col-sm-5  input-group input-group-sm">
-                                <input type="text" class="form-control border border-primary" name="txtup" id="txtup" autocomplete="off">
-
-                            </div>
-                        </div>
-                        <div class="form-group row row-table ml-1 mt-n3 mb-n1">
+                        <div class="form-group row row-table ml-1 mt-1 mb-n1">
                             <div class="col-sm-1 ml-n1">
                                 <label for="basic-url">Note </label>
                             </div>

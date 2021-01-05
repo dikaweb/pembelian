@@ -42,6 +42,16 @@
                                 <span class="text-body" id="lblnm_rekanan1"><?= $konfirmasi_m['alamat_sp']; ?></span>
                             </div>
                         </h6>
+                        <div class="row ">
+                            <div class="col-sm-2 mt-1 ml-2">
+                                <label for="basic-url">PIC </label>
+                            </div>
+
+                            <div class="col-sm-9  input-group input-group-sm">
+                                : &nbsp;<input type="text" class="form-control border border-primary" name="txtup" id="txtup" autocomplete="off" value="<?= $konfirmasi_m['up1']; ?>">
+
+                            </div>
+                        </div>
                         <h5>
                             <div class="panel-body my-1 mx-1">
                                 <span class="text-body" id="lblalamat1"><?= $konfirmasi_m['nm_company']; ?></span>
@@ -138,18 +148,9 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group row row-table ml-1 mt-1 ">
-                            <div class="col-sm-1 ml-n1 mt-1 ">
-                                <label for="basic-url">CP </label>
-                            </div>
 
-                            <div class="col-sm-5  input-group input-group-sm">
-                                <input type="text" class="form-control border border-primary" name="txtup" id="txtup" autocomplete="off" value="<?= $konfirmasi_m['up1']; ?>">
-
-                            </div>
-                        </div>
-                        <div class="form-group row row-table ml-1 mt-n3 mb-n1">
-                            <div class="col-sm-1 ml-n1">
+                        <div class="form-group row row-table ml-1 mt-1 mb-n1">
+                            <div class="col-sm-2 ml-n1">
                                 <label for="basic-url">Note </label>
                             </div>
 
@@ -457,7 +458,7 @@
                                         <?php } ?>
                                     </td>
                                     <td><?= $mr['nm_barang']; ?></td>
-                                    <td><?= $mr['jumlah']; ?></td>
+                                    <td><?= rp($mr['jumlah']); ?></td>
                                     <td><?= $mr['nm_satuan']; ?></td>
                                     <td><?= rp($mr['harga']); ?></td>
 

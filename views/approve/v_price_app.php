@@ -23,28 +23,56 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>No. PO/SPK</th>
-                            <!-- <th>Tanggal</th> -->
                             <th>Supplier</th>
-                            <th>PT</th>
-                            <!-- <th>Jenis</th> -->
-                            <th>Total</th>
-                            <!-- <th>User</th> -->
+                            <th>Nama Item</th>
+                            <th>Harga PO</th>
+                            <th>Harga INV</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($konfirmasi as $mr) : ?>
                             <tr>
                                 <td>
-                                    <a href="#" class="badge badge-success clastombolapp" data-jenis="<?= $mr['jenis']; ?>" data-id="<?= $mr['id_transaksi']; ?>" data-toggle="modal">Approve</a>
+                                    <a href="#" class="badge badge-success clastombolapp" data-id="<?= $mr['id_bpb']; ?>" data-toggle="modal">Approve</a>
                                 </td>
-                                <td><?= $mr['no_transaksi']; ?></td>
-                                <!-- <td><?= tgl_indo($mr['tanggal']); ?></td> -->
                                 <td><?= $mr['nm_supplier']; ?></td>
-                                <td><?= $mr['nm_company']; ?></td>
-                                <!-- <td><?= $mr['jenis']; ?></td> -->
-                                <td align="right"><?= rp($mr['tt']); ?></td>
-                                <!-- <td><?= $mr['name']; ?></td> -->
+                                <td>
+                                    <?php
+                                    $id_transaksi = $mr['id_bpb'];
+                                    $querySubMenu = "SELECT b.nm_barang from trans_bpb_d a 
+                                    inner join trans_po_d b on b.id_detail = a.id_po_d
+                                    where  a.id_bpb = $id_transaksi and a.harga>b.harga order by a.id_detail";
+                                    $subMenu = $this->db->query($querySubMenu)->result_array();
+                                    foreach ($subMenu as $m) :
+                                        echo $m['nm_barang'] . '<br>';
+                                    endforeach;
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php
+                                    $id_transaksi = $mr['id_bpb'];
+                                    $querySubMenu = "SELECT b.harga from trans_bpb_d a 
+                                    inner join trans_po_d b on b.id_detail = a.id_po_d
+                                    where  a.id_bpb = $id_transaksi and a.harga>b.harga order by a.id_detail";
+                                    $subMenu = $this->db->query($querySubMenu)->result_array();
+                                    foreach ($subMenu as $m) :
+                                        echo rp($m['harga']) . '<br>';
+                                    endforeach;
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php
+                                    $id_transaksi = $mr['id_bpb'];
+                                    $querySubMenu = "SELECT a.harga from trans_bpb_d a 
+                                    inner join trans_po_d b on b.id_detail = a.id_po_d
+                                    where  a.id_bpb = $id_transaksi and a.harga>b.harga order by a.id_detail";
+                                    $subMenu = $this->db->query($querySubMenu)->result_array();
+                                    foreach ($subMenu as $m) :
+                                        echo rp($m['harga']) . '<br>';
+                                    endforeach;
+                                    ?>
+                                </td>
+
                             </tr>
 
                         <?php endforeach; ?>
@@ -75,7 +103,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="viewModalLabel">Approve Penawaran</h5>
+                <h5 class="modal-title" id="viewModalLabel">Price Change Approval</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -136,17 +164,7 @@
     $(function() {
         $('.clastombolapp').on('click', function() {
             $id_trans = $(this).data('id');
-            jenis = $(this).data('jenis');
-
-            if (jenis == "PO") {
-                $('#viewModalLabel').text('Approve PO');
-                $('#view-area').load("<?= base_url('approve/app_po/modal_approve_po/'); ?>" + $id_trans);
-            } else {
-                $('#viewModalLabel').text('Approve SPK');
-                $('#view-area').load("<?= base_url('approve/app_po/modal_approve_spk/'); ?>" + $id_trans);
-            }
-
-
+            $('#view-area').load("<?= base_url('approve/price_app/modal_price_app/'); ?>" + $id_trans);
             $('#viewModal').modal();
         });
     });

@@ -2,7 +2,18 @@
 <link href="<?= base_url('assets/'); ?>vendor/datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
 <input type="hidden" name="txtid_user" id="txtid_user" value="<?= $user['id']; ?>">
 <input type="hidden" name="txt_company" id="txt_company" value="<?= $konfirmasi_m['id_company']; ?>">
-
+<style type="text/css">
+    .hiddentext {
+        background-color: rgba(0, 0, 0, 0);
+        color: white;
+        border: none;
+        outline: none;
+        height: 30px;
+        width: 1px;
+        transition: height 1s;
+        -webkit-transition: height 1s;
+    }
+</style>
 
 <body>
     <input type="hidden" name="txtid_gudang" id="txtid_gudang" value="<?= $konfirmasi_m['id_gudang']; ?>">
@@ -181,7 +192,7 @@
                                     <?php } ?>
                                 </td>
                                 <td><?= $mr['nm_barang']; ?></td>
-                                <td><?= $mr['jumlah']; ?> <?= $mr['nm_satuan']; ?></td>
+                                <td><?= rp($mr['jumlah']); ?> <?= $mr['nm_satuan']; ?></td>
 
                             </tr>
                         <?php endforeach; ?>
@@ -192,13 +203,31 @@
     </div>
 
     <!-- -----------------------------------------Card Gambar -------------------------------------------- -->
-    <form class="user" id="validasi" method="post" action="<?= base_url('trans/bpb/upload'); ?>" enctype="multipart/form-data">
+    <form class="user" id="validasi" method="post" action="<?= base_url('trans/bpb/upload_d'); ?>" enctype="multipart/form-data">
         <div class=" mx-4">
             <div class=" table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <td>
+                                <div class="form-group row row-table ml-1  mt-n2">
+                                    <div class="col-sm-2">
+                                        <label for="basic-url">Foto gambar</label>
+                                    </div>
+                                    <div class="col-sm-7  input-group input-group-sm">
+                                        <a href="" data-toggle="modal" data-target="#fotoModal" data-nm_jenis="bukti" data-nama="Foto Bukti" class=" badge badge-success clastombolfoto">...</a>
+
+                                        <input type="text" class="hiddentext" id="is_sp" name="is_sp" required="required" value="<?= $this->session->userdata('nm_file'); ?>">
+                                        <?php if (!$this->session->userdata('nm_file')) {
+                                            echo "Belum ada gambar";
+                                        } ?>
+                                        <?php if ($this->session->userdata('nm_file')) { ?>
+                                            <a href="#" data-nm_file="<?= $this->session->userdata('nm_file'); ?>" class=" clastombolemail" data-toggle="modal" data-target="#emailMenuModal">
+                                                <img src="<?= base_url('assets/img/') . 'checklist.png'; ?>"> </a>
+                                        <?php } ?>
+
+                                    </div>
+                                </div>
                                 <div class="form-group row row-table ml-1 mt-n2">
                                     <input type="hidden" name="txtid_transaksi" id="txtid_transaksi" value="<?= $konfirmasi_m['id_transaksi']; ?>">
                                     <div class="col-sm-2 ">
@@ -211,20 +240,11 @@
                                             <option value="PO">PO</option>
                                             <option value="SJ">SJ</option>
                                             <option value="INV">Invoice / Nota</option>
+                                            <option value="LAI">Lain - lain</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group row row-table ml-1  mt-n2">
-                                    <div class="col-sm-2">
-                                        <label for="basic-url">Pilih gambar</label>
-                                    </div>
-                                    <div class="col-sm-7  input-group input-group-sm">
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input" name="is_sp" id="is_sp" accept=".jpg,.jpeg" required="required">
-                                            <label class="custom-file-label border border-primary" for="is_sp" required="required">Choose file</label>
-                                        </div>
-                                    </div>
-                                </div>
+
                                 <div class="form-group row row-table ml-1 mt-n2">
                                     <div class="col-sm-2">
                                         <label for="basic-url">Ket</label>
@@ -241,9 +261,9 @@
                                     </div>
                                     <div class="col-sm-7  input-group input-group-sm  ml-1">
                                         <div class="form-group row row-table ">
-                                            <?php if ($konfirmasi_m['id_user'] == $user['id']) { ?>
-                                                <button class="btn btn-success" id="btn_upload" type="submit">Tambahkan Gambar</button>
-                                            <?php } ?>
+
+                                            <button class="btn btn-success" id="btn_upload" type="submit">Tambahkan Gambar</button>
+
                                         </div>
                                     </div>
                                 </div>
@@ -274,11 +294,15 @@
                             <tr>
 
                                 <td>
-                                    <?php if ($konfirmasi_m['id_user'] == $user['id']) { ?>
+                                    <?php if ($gb['id_user'] == $user['id']) { ?>
                                         <a href="#" class="badge badge-danger clastomboldelete" data-id="<?= $gb['id_transaksi']; ?>" data-pt_customer="<?= $gb['jenis']; ?>" data-ket="<?= $gb['ket']; ?>" data-toggle="modal" data-target="#deletegbr">delete</a>
                                     <?php } ?>
                                 </td>
-                                <td>Jenis : <?= $gb['jenis']; ?><br><?= $gb['ket']; ?></td>
+                                <td>
+                                    Jenis : <?= $gb['jenis']; ?><br><?= $gb['ket']; ?><br>
+                                    User : <?= $gb['nama_lengkap']; ?>
+
+                                </td>
                                 <td>
                                     <div class="col-sm">
                                         <?php $path = base_url('assets/bpb/') . $gb['nm_file']; ?>
@@ -345,6 +369,101 @@
         </div>
     </div>
 
+    <!-- ------------------------------------------------------------------Modal Foto------------------------------------------ -->
+
+    <div class="modal fade" id="fotoModal" tabindex="-1" role="dialog" aria-labelledby="fotoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="fotoModalLabel">te</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <!-- DataTables Example -->
+                <div class="card shadow mb-1" id="foto-area">
+                    <style>
+                        input {
+                            margin-top: 1px;
+                        }
+
+                        @media handheld and (orientation: landscape) {
+                            .wrapper {
+                                position: relative;
+                                width: 320px;
+                                height: 240px;
+                                -moz-user-select: none;
+                                -webkit-user-select: none;
+                                -ms-user-select: none;
+                                user-select: none;
+                            }
+
+                            .signature-pad {
+                                position: absolute;
+                                left: 0;
+                                top: 0;
+                                width: 320px;
+                                height: 240px;
+                            }
+                        }
+
+                        @media handheld and (orientation: portrait) {
+                            .wrapper {
+                                position: relative;
+                                width: 240px;
+                                height: 320px;
+                                -moz-user-select: none;
+                                -webkit-user-select: none;
+                                -ms-user-select: none;
+                                user-select: none;
+                            }
+
+                            .signature-pad {
+                                position: absolute;
+                                left: 0;
+                                top: 0;
+                                width: 240px;
+                                height: 320px;
+                            }
+                        }
+                    </style>
+                    <div class="card shadow mb-1" id="foto-area">
+                        <div class="card-body">
+                            <form method="POST" onsubmit="simpan()">
+
+                                <input type="hidden" name="datauri" id="datauri">
+                                <p>Ambil Gambar</p>
+                                <div>
+                                    <div id="camera">
+                                    </div>
+                                    <div class="wrapper" id="idsignature">
+                                        <canvas id="signature-pad" class="signature-pad"></canvas>
+                                    </div>
+                                </div>
+                                <div id="webcam">
+                                    <input type=button value="Foto" onClick="preview()">
+                                </div>
+                                <div id="simpan" style="display:none">
+                                    <input type=button value="Ulangi" onClick="batal()">
+                                    <input type=button value="Upload" onClick="upload()">
+                                    <input type=button value="Hapus tanda" onClick="undo()">
+                                </div>
+
+                            </form>
+                            <div>
+
+
+                            </div>
+
+                            <div id="hasil"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ------------------------------------------------------------------Modal Delete gambar------------------------------------------- -->
     <div class="modal fade" id="deletegbr" tabindex="-1" role="dialog" aria-labelledby="deletegbrLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -386,7 +505,45 @@
         </div>
     </div>
 
+    <!---------------------------------------------- Modal Email -------------------------------->
+    <div class="modal fade" id="emailMenuModal" tabindex="-1" role="dialog" aria-labelledby="emailMenuModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="emailMenuModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
 
+                <div class="modal-body">
+                    <div style="text-align:center;">
+                        <embed id="pdfscan" src="" type="application/pdf" width="1024" height="550" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ------------------------------Modal Loading ------------------------------------------>
+    <div class="modal fade" id="loadMe" tabindex="-1" role="dialog" aria-labelledby="loadMeLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <div class="loader"></div>
+                    <div clas="loader-txt">
+                        <p>Proses sedang berjalan. <br><br><small>Mohon tunggu</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 <script src="<?= base_url('assets/'); ?>vendor/jquery/jquery.min.js"></script>
 <script src="<?= base_url('assets/'); ?>vendor/jquery/jquery.mask.js"></script>
@@ -400,6 +557,8 @@
 <!-- Page level plugins -->
 <script src="<?= base_url('assets/'); ?>vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="<?= base_url('assets/'); ?>vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="<?= base_url('assets/'); ?>js/signature_pad.min.js"></script>
+<script src="<?= base_url('assets/'); ?>vendor/jquery/webcam.js"></script>
 
 <script src="<?= base_url('assets/'); ?>js/v_po.js"></script>
 <!---------------------------------------------------- Date Picture-------------------------------------------- -->
@@ -412,6 +571,64 @@
             language: 'id'
         })
         $('#tgl_awal').datepicker('setDate', new Date($('#tgl').val()));
+
+        $('.clastombolemail').on('click', function() {
+            $('#emailMenuModalLabel').text($(this).data('email'));
+            $path = "<?= base_url('assets/bpb_temp/'); ?>" + $('#is_sp').val();
+            console.log($('#is_sp').val());
+            var parent = $('embed#pdfscan').parent();
+            var newImage = "<embed id=\"pdfscan\" src=\"" + $path + "\" type=\"image/jpeg\"  width=\"320\" />";
+            var newElement = $(newImage);
+            $('embed#pdfscan').remove();
+            parent.append(newElement);
+
+        });
+
+        $('.clastombolfoto').on('click', function() {
+
+            $('#fotoModalLabel').text($(this).data('nama'));
+
+            $.ajax({
+                url: "<?= base_url('trans/bpb/set_session'); ?>",
+                data: {
+                    id: $('#txtid_transaksi').val()
+                },
+                method: "post",
+                dataType: 'json',
+                success: function(data) {
+
+                },
+            });
+
+            $("#foto-area").show();
+            Webcam.unfreeze();
+            document.getElementById('webcam').style.display = '';
+            document.getElementById('simpan').style.display = 'none';
+            if (screen.height <= screen.width) {
+                // Landscape
+                Webcam.set({
+                    width: 320,
+                    height: 240,
+                });
+
+            } else {
+                // Portrait
+                Webcam.set({
+                    width: 240,
+                    height: 320,
+                });
+            }
+            Webcam.set({
+                image_format: 'jpeg',
+                jpeg_quality: 100,
+                constraints: {
+                    video: true,
+                    facingMode: "environment"
+                }
+            });
+            Webcam.attach('#camera');
+        });
+
     });
 </script>
 
@@ -520,5 +737,128 @@
         id_trans = $('#txtid_transaksi').val();
         url = "<?= base_url('trans/bpb/cetak2/'); ?>" + id_trans;
         window.open(url, '_blank')
+    }
+</script>
+
+
+<script language="Javascript">
+    $("#idsignature").hide();
+    // konfigursi webcam
+    var signaturePad = new SignaturePad(document.getElementById('signature-pad'), {
+        penColor: 'rgb(255, 0, 0)'
+    });
+
+    function undo() {
+        var canvas = document.getElementById("signature-pad"),
+            ctx = canvas.getContext("2d");
+
+        if (screen.height <= screen.width) {
+            canvas.width = 320;
+            canvas.height = 240;
+        } else {
+            canvas.width = 240;
+            canvas.height = 320;
+        }
+
+
+        data = $('#datauri').val();
+
+        var background = new Image();
+        background.src = data;
+        background.onload = function() {
+            ctx.drawImage(background, 0, 0);
+        }
+    }
+
+
+    function foto() {
+        $("#is_foto-area").hide();
+        $("#foto-area").show();
+        Webcam.unfreeze();
+        document.getElementById('webcam').style.display = '';
+        document.getElementById('simpan').style.display = 'none';
+        if (screen.height <= screen.width) {
+            // Landscape
+            Webcam.set({
+                width: 320,
+                height: 240,
+            });
+
+        } else {
+            // Portrait
+            Webcam.set({
+                width: 240,
+                height: 320,
+
+            });
+        }
+        Webcam.set({
+            image_format: 'jpeg',
+            jpeg_quality: 100,
+            //force_flash: true,
+            constraints: {
+                video: true,
+                facingMode: "environment"
+            }
+        });
+        Webcam.attach('#camera');
+    }
+
+    function upload() {
+        $("#loadMe").modal({
+            backdrop: "static", //remove ability to close modal with click
+            keyboard: false, //remove option to close with keyboard
+            show: true //Display loader!
+        });
+        var data = signaturePad.toDataURL('image/png');
+
+        //console.log(data);
+        Webcam.upload(data, '<?= base_url('trans/bpb/upload_bukti'); ?>', function(code, text) {});
+        setTimeout(function() {
+            url = "<?= base_url('trans/bpb/edit/'); ?>" + $('#txtid_transaksi').val();
+            window.location.replace(url);
+            $("#target").submit();
+        }, 3500);
+    }
+
+    function preview() {
+        $('#camera').hide();
+        $("#idsignature").show();
+        // untuk preview gambar sebelum di upload
+        Webcam.freeze();
+        // ganti display webcam menjadi none dan simpan menjadi terlihat
+        document.getElementById('webcam').style.display = 'none';
+        document.getElementById('simpan').style.display = '';
+
+        var canvas = document.getElementById("signature-pad"),
+            ctx = canvas.getContext("2d");
+
+        if (screen.height <= screen.width) {
+            canvas.width = 320;
+            canvas.height = 240;
+        } else {
+            canvas.width = 240;
+            canvas.height = 320;
+        }
+
+        Webcam.snap(function(data_uri) {
+            data = data_uri;
+        });
+        var background = new Image();
+        background.src = data;
+        background.onload = function() {
+            ctx.drawImage(background, 0, 0);
+        }
+        $('#datauri').val(data);
+    }
+
+    function batal() {
+        // batal preview
+        $('#camera').show();
+        $("#idsignature").hide();
+        Webcam.unfreeze();
+        // ganti display webcam dan simpan seperti semula
+        document.getElementById('webcam').style.display = '';
+        document.getElementById('simpan').style.display = 'none';
     }
 </script>

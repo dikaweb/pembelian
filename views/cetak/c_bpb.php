@@ -31,7 +31,7 @@ $html .= '
 
 <table cellspacing="0" width="100%" cellpadding="0" border="0">
   <tr height="25">
-    <td colspan="3" ><div align="center"><font size="12"><strong>BERITA ACARA SERAH TERIMA BARANG<br></strong></font></div></td>
+    <td colspan="3" ><div align="center"><font size="12"><strong>BERITA ACARA<br></strong></font></div></td>
   </tr>
 
   <tr height="20" >

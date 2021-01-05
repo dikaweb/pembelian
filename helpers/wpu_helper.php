@@ -2,6 +2,7 @@
 
 function is_logged_in()
 {
+    //die();
     $ci = get_instance();
     if (!$ci->session->userdata('usernamez')) {
         redirect('auth');
@@ -23,6 +24,7 @@ function is_logged_in()
                 redirect('auth/blocked');
             }
         } else {
+
             $role_id = $ci->session->userdata('role_idz');
             $sub_menu = $ci->uri->segment(1) . "/" . $ci->uri->segment(2);
             $queryMenu = $ci->db->get_where('user_sub_menu', ['url' => $sub_menu])->row_array();
@@ -42,10 +44,10 @@ function is_logged_in()
                 'role_id' => $role_id,
                 'sub_menu_id' => $menu_id
             ])->row_array();
-            $ci->session->set_flashdata('roz',  $readonly['ro']);
-            $ci->session->set_flashdata('v_allz',  $readonly['v_all']);
-            $ci->session->set_flashdata('v_all_lokasiz',  $readonly['v_all_lokasi']);
-            $ci->session->set_flashdata('v_all_deptz',  $readonly['v_all_dept']);
+            $ci->session->set_flashdata('ro',  $readonly['ro']);
+            $ci->session->set_flashdata('v_all',  $readonly['v_all']);
+            $ci->session->set_flashdata('v_all_lokasi',  $readonly['v_all_lokasi']);
+            $ci->session->set_flashdata('v_all_dept',  $readonly['v_all_dept']);
         }
     }
 }
@@ -195,6 +197,31 @@ function tgl_indo($tanggal)
         'Oktober',
         'November',
         'Desember'
+    );
+    $pecahkan = explode('-', $tanggal);
+
+    // variabel pecahkan 0 = tanggal
+    // variabel pecahkan 1 = bulan
+    // variabel pecahkan 2 = tahun
+
+    return $pecahkan[2] . ' ' . $bulan[(int) $pecahkan[1]] . ' ' . $pecahkan[0];
+}
+
+function tgl_indo2($tanggal)
+{
+    $bulan = array(
+        1 =>   'Jan',
+        'Feb',
+        'Maret',
+        'Apr',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agust',
+        'Sept',
+        'Okt',
+        'Nov',
+        'Des'
     );
     $pecahkan = explode('-', $tanggal);
 

@@ -116,7 +116,8 @@ class bpb_model extends CI_Model
     public function gbr($id_transaksi)
     {
 
-        $query = "SELECT  * from trans_bpb_d_gbr 
+        $query = "SELECT  * from trans_bpb_d_gbr a
+        inner join user b on a.id_user = b.id
         where id_bpb = $id_transaksi
         ";
 
@@ -172,72 +173,25 @@ class bpb_model extends CI_Model
         return $this->db->query($query)->result_array();
     }
 
-    public function upload()
-    {
-        $post = $this->input->post();
-        $id_bpb =  $post['txtid_transaksi'];
-        //$id_pr_d =  $post['top'];
-        //$gbr["file_name"] = "";
-        $config['upload_path'] = "./assets/bpb/";
-        $config['allowed_types'] = 'gif|jpg|png|jpeg';
-        $config['encrypt_name'] = true;
-        $this->load->library('upload', $config, 'lokasi1');
-        if ($this->lokasi1->do_upload("is_sp")) {
-            $gbr = $this->lokasi1->data();
-            //Compress Image
-            $configsize['image_library'] = 'gd2';
-            $configsize['source_image'] = './assets/bpb/' . $gbr['file_name'];
-            $configsize['create_thumb'] = FALSE;
-            $configsize['maintain_ratio'] = TRUE;
-            $configsize['height'] = 700;
-            $configsize['new_image'] = './assets/bpb/' . $gbr['file_name'];
-            $this->load->library('image_lib', $configsize);
-            $this->image_lib->resize();
 
-            $id_user = $this->session->userdata('id_loginz');
-            $data2 = [
-                'id_bpb' => $id_bpb,
-                'jenis' => $post['txtjenis'],
-                'id_user' => $id_user,
-                'nm_file' => $gbr["file_name"],
-                'ket' => $post['txtket'],
-            ];
-            $this->db->insert('trans_bpb_d_gbr', $data2);
-        }
-
-        return  (int)$id_bpb;
-    }
     public function upload_m($id_transaksi)
     {
         $post = $this->input->post();
-        $id_bpb =  $id_transaksi;
-        //$id_pr_d =  $post['top'];
-        //$gbr["file_name"] = "";
-        $config['upload_path'] = "./assets/bpb/";
-        $config['allowed_types'] = 'gif|jpg|png|jpeg';
-        $config['encrypt_name'] = true;
-        $this->load->library('upload', $config, 'lokasi1');
-        if ($this->lokasi1->do_upload("is_sp")) {
-            $gbr = $this->lokasi1->data();
-            //Compress Image
-            $configsize['image_library'] = 'gd2';
-            $configsize['source_image'] = './assets/bpb/' . $gbr['file_name'];
-            $configsize['create_thumb'] = FALSE;
-            $configsize['maintain_ratio'] = TRUE;
-            $configsize['height'] = 700;
-            $configsize['new_image'] = './assets/bpb/' . $gbr['file_name'];
-            $this->load->library('image_lib', $configsize);
-            $this->image_lib->resize();
+        $d_asal = './assets/bpb_temp/';
+        $d_tujuan = './assets/bpb/';
+        rename($d_asal . $post['is_sp'], $d_tujuan . $post['is_sp']);
 
-            $id_user = $this->session->userdata('id_loginz');
-            $data2 = [
-                'id_bpb' => $id_bpb,
-                'jenis' => $post['txtjenis'],
-                'id_user' => $id_user,
-                'nm_file' => $gbr["file_name"],
-                'ket' => $post['txtket'],
-            ];
-            $this->db->insert('trans_bpb_d_gbr', $data2);
-        }
+
+        $id_bpb =  $id_transaksi;
+        $id_user = $this->session->userdata('id_loginz');
+        $data2 = [
+            'id_bpb' => $id_bpb,
+            'jenis' => $post['txtjenis'],
+            'id_user' => $id_user,
+            'nm_file' =>  $post['is_sp'],
+            'ket' => $post['txtket'],
+        ];
+        $this->db->insert('trans_bpb_d_gbr', $data2);
+        $this->session->set_userdata('nm_file', '');
     }
 }

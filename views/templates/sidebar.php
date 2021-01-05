@@ -97,7 +97,18 @@
 
                                 if ($sm['sub_menu_id'] == 63) :
 
-                                    $c = $this->db->query('select * from trans_po where status <> 5 and is_voucher <> 1 ')->num_rows();
+                                    $c = $this->db->query('select * from trans_po where (is_voucher <> 1 or status <> 5) ')->num_rows();
+
+                                    if ($c <> 0) :
+                                        echo "(";
+                                        echo $c;
+                                        echo ")";
+                                    endif;
+                                endif;
+
+                                if ($sm['sub_menu_id'] == 65) :
+
+                                    $c = $this->db->query('select * from trans_bpb where (is_harga_tambah <> 0) ')->num_rows();
 
                                     if ($c <> 0) :
                                         echo "(";

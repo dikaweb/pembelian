@@ -6,7 +6,7 @@
                     <th>Action</th>
                     <th>Nama</th>
                     <th>Alamat</th>
-                    <th>UP</th>
+                    <th>UP / PIC</th>
                     <th>No. Rek</th>
                 </tr>
             </thead>

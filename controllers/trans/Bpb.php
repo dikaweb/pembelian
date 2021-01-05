@@ -11,7 +11,7 @@ class bpb extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        //is_logged_in();
+        is_logged_in();
         $this->load->model("trans/bpb_model");
     }
 
@@ -31,24 +31,48 @@ class bpb extends CI_Controller
     {
         $data['title'] = 'Serah Terima PO/SPK';
         $data['user'] = $this->db->get_where('user', ['username' => $this->session->userdata('usernamez')])->row_array();
-
-        if ($id_company == 0) {
-            $query = " select *,nama_lengkap as name from trans_bpb a
+        $id_user =  $data['user']['id'];
+        $v_all = $this->session->flashdata('v_all'); //session ini diambil dari helper 
+        //var_dump($v_all);
+        //die();
+        if ($v_all == "1") {
+            if ($id_company == 0) {
+                $query = " select *,nama_lengkap as name from trans_bpb a
         left join m_supplier b on a.id_supplier = b.id_supplier
         left join user c on a.id_user = c.id
         inner join m_company d on a.id_company = d.id_company
         where a.tanggal  between '$startDate' and '$endDate' 
-        order by a.tanggal";
-            $data['kota'] = 'ALL';
-        } else {
-            $query = " select *,nama_lengkap as name from trans_bpb a
+        order by a.tanggal desc";
+                $data['kota'] = 'ALL';
+            } else {
+                $query = " select *,nama_lengkap as name from trans_bpb a
         left join m_supplier b on a.id_supplier = b.id_supplier
         left join user c on a.id_user = c.id
         inner join m_company d on a.id_company = d.id_company
         where a.id_company = $id_company and a.tanggal  between '$startDate' and '$endDate' 
-        order by a.tanggal";
-            $data['dipilih'] = $this->db->get_where('m_company', ['id_company' => $id_company])->row_array();
-            $data['kota'] = $data['dipilih']['nm_company'];
+        order by a.tanggal  desc";
+                $data['dipilih'] = $this->db->get_where('m_company', ['id_company' => $id_company])->row_array();
+                $data['kota'] = $data['dipilih']['nm_company'];
+            }
+        } else {
+            if ($id_company == 0) {
+                $query = " select *,nama_lengkap as name from trans_bpb a
+        left join m_supplier b on a.id_supplier = b.id_supplier
+        left join user c on a.id_user = c.id
+        inner join m_company d on a.id_company = d.id_company
+        where a.id_user =  $id_user and a.tanggal  between '$startDate' and '$endDate' 
+        order by a.tanggal  desc";
+                $data['kota'] = 'ALL';
+            } else {
+                $query = " select *,nama_lengkap as name from trans_bpb a
+        left join m_supplier b on a.id_supplier = b.id_supplier
+        left join user c on a.id_user = c.id
+        inner join m_company d on a.id_company = d.id_company
+        where a.id_user =  $id_user and a.id_company = $id_company and a.tanggal  between '$startDate' and '$endDate' 
+        order by a.tanggal  desc";
+                $data['dipilih'] = $this->db->get_where('m_company', ['id_company' => $id_company])->row_array();
+                $data['kota'] = $data['dipilih']['nm_company'];
+            }
         }
         $data['konfirmasi'] = $this->db->query($query)->result_array();
         $querytbl = " select * from m_company";
@@ -67,7 +91,19 @@ class bpb extends CI_Controller
         $row = $this->db->get_where('user', ['username' => $this->session->userdata('usernamez')])->row_array();
         $data['user'] = $row;
         $id_lokasi_penerima = $row['lokasi_id'];
-        $query = " 
+        $v_all = $this->session->flashdata('v_all'); //session ini diambil dari helper 
+        $this->session->set_userdata('nm_file', '');
+        if ($v_all == "1") {
+            $query = " 
+            select a.jenis,b.nm_supplier as nm_supplier,a.id_transaksi as id_transaksi, a.no_transaksi as no_transaksi,
+            a.tanggal as tanggal,c.kode_c as nm_company,a.id_company,a.id_supplier
+            from trans_po a
+            left join m_supplier b on a.id_supplier = b.id_supplier
+            inner join m_company c on a.id_company = c.id_company
+            where status in(3,4)
+             ";
+        } else {
+            $query = " 
         select a.jenis,b.nm_supplier as nm_supplier,a.id_transaksi as id_transaksi, a.no_transaksi as no_transaksi,
         a.tanggal as tanggal,c.kode_c as nm_company,a.id_company,a.id_supplier
         from trans_po a
@@ -75,6 +111,7 @@ class bpb extends CI_Controller
         inner join m_company c on a.id_company = c.id_company
         where status in(3,4) and id_lokasi_penerima = $id_lokasi_penerima
          ";
+        }
 
 
         $data['konfirmasi'] = $this->db->query($query)->result_array();
@@ -123,7 +160,6 @@ class bpb extends CI_Controller
     public function save_m()
     {
         $post = $this->input->post();
-
 
         $tahun = date('Y', strtotime($this->input->post("tanggal")));
         $id_gudang = $this->input->post('id_gudang');
@@ -264,6 +300,7 @@ class bpb extends CI_Controller
         if (sizeof($updateArray) > 0) {
             $this->db->insert_batch('trans_bpb_d', $updateArray);
             $this->bpb_model->upload_m($id_transaksi);
+            $this->session->set_userdata('nm_file', '');
             $url = 'trans/bpb/edit/' . $id_transaksi;
         } else {
             $dika = '<div class="alert alert-danger" role="alert">Tidak ada data yang bisa disimpan karena jumlah yg diinputkan melebihi sisa, silahkan ulangi!</div>';
@@ -424,11 +461,35 @@ class bpb extends CI_Controller
         }
     }
 
-    public function upload()
+    public function upload_d()
     {
         //$this->penawaran_model->update_m();
-        $this->bpb_model->upload();
-        $url = 'trans/bpb/edit/' . $this->input->post('txtid_transaksi');
+        $post = $this->input->post();
+        $id = $post['txtid_transaksi'];
+        $this->bpb_model->upload_m($id);
+        $url = 'trans/bpb/edit/' . $id;
         redirect($url);
+    }
+
+
+
+    public function upload_bukti()
+    {
+
+        $direktori = './assets/bpb_temp/';
+
+
+        $id_bpb = $this->session->userdata('id_bpb');
+        $nama_file = time() . '-' . $id_bpb . '.jpg';
+
+
+        $target = $direktori . $nama_file;
+        move_uploaded_file($_FILES['webcam']['tmp_name'], $target);
+        $this->session->set_userdata('nm_file', $nama_file);
+        return  (int)$id_bpb;
+    }
+    public function set_session()
+    {
+        $this->session->set_userdata('id_bpb', $this->input->post('id'));
     }
 }

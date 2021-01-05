@@ -1,5 +1,17 @@
 <link href="<?= base_url('assets/'); ?>vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 <link href="<?= base_url('assets/'); ?>vendor/datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
+<style type="text/css">
+    .hiddentext {
+        background-color: rgba(0, 0, 0, 0);
+        color: white;
+        border: none;
+        outline: none;
+        height: 30px;
+        width: 1px;
+        transition: height 1s;
+        -webkit-transition: height 1s;
+    }
+</style>
 <input type="hidden" name="txtid_user" id="txtid_user" value="<?= $user['id']; ?>">
 <input type="hidden" name="txt_company" id="txt_company" value="<?= $konfirmasi_m['id_company']; ?>">
 <?= form_open_multipart('trans/bpb/save_m/' . $konfirmasi_m['id_transaksi'], array('id' => 'submit')); ?>
@@ -11,8 +23,69 @@
             <button class="btn btn-success col-sm-2 mt-1 btn-sm" id=" btn_upload" type="submit">Simpan</button>
 
         </div>
-        <div class="row row-table mb-1">
 
+        <!-- -----------------------------------------Card Gambar -------------------------------------------- -->
+
+
+        <div class=" table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+
+                        <td>
+
+                            <div class="form-group row row-table ml-1  mt-n2">
+                                <div class="col-sm-2">
+                                    <label for="basic-url">Foto gambar</label>
+                                </div>
+                                <div class="col-sm-7  input-group input-group-sm">
+                                    <a href="" data-toggle="modal" data-target="#fotoModal" data-nm_jenis="bukti" data-nama="Foto Bukti" class=" badge badge-success clastombolfoto">...</a>
+
+                                    <input type="text" class="hiddentext" id="is_sp" name="is_sp" required="required" value="<?= $this->session->userdata('nm_file'); ?>">
+                                    <?php if (!$this->session->userdata('nm_file')) {
+                                        echo "Belum ada gambar";
+                                    } ?>
+                                    <?php if ($this->session->userdata('nm_file')) { ?>
+                                        <a href="#" data-nm_file="<?= $this->session->userdata('nm_file'); ?>" class=" clastombolemail" data-toggle="modal" data-target="#emailMenuModal">
+                                            <img src="<?= base_url('assets/img/') . 'checklist.png'; ?>"> </a>
+                                    <?php } ?>
+
+                                </div>
+                            </div>
+                            <div class="form-group row row-table ml-1 mt-n2">
+                                <input type="hidden" name="txtid_transaksi" id="txtid_transaksi" value="<?= $konfirmasi_m['id_transaksi']; ?>">
+                                <div class="col-sm-2 ">
+                                    <label for="basic-url">Jenis gambar</label>
+                                </div>
+
+                                <div class="col-sm-2  input-group input-group-sm">
+                                    <select class="border border-primary custom-select" name="txtjenis" id="txtjenis" required="required">
+                                        <option value=""></option>
+                                        <option value="PO">PO</option>
+                                        <option value="SJ">SJ</option>
+                                        <option value="INV">Invoice / Nota</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row row-table ml-1 mt-n2 mb-n2">
+                                <div class="col-sm-2">
+                                    <label for="basic-url">Keterangan</label>
+                                </div>
+                                <div class="col-sm-7  input-group input-group-sm">
+                                    <div class="custom-file">
+                                        <input type="text" class="form-control-sm border border-primary" id="txtket" name="txtket" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
+
+
+        <div class="row row-table mb-1">
             <div class="col-md-4 col-table mt-1 mb-1">
                 <div class="panel panel-primary col-content bg border border-primary ">
                     <h5>
@@ -84,61 +157,6 @@
 
 
 
-    <!-- -----------------------------------------Card Gambar -------------------------------------------- -->
-
-    <div class=" mx-4">
-        <div class=" table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                    <tr>
-
-                        <td>
-                            <div class="form-group row row-table ml-1 mt-n2">
-                                <input type="hidden" name="txtid_transaksi" id="txtid_transaksi" value="<?= $konfirmasi_m['id_transaksi']; ?>">
-                                <div class="col-sm-2 ">
-                                    <label for="basic-url">Jenis gambar</label>
-                                </div>
-
-                                <div class="col-sm-2  input-group input-group-sm">
-                                    <select class="border border-primary custom-select" name="txtjenis" id="txtjenis" required="required">
-                                        <option value=""></option>
-                                        <option value="PO">PO</option>
-                                        <option value="SJ">SJ</option>
-                                        <option value="INV">Invoice / Nota</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row row-table ml-1  mt-n2">
-                                <div class="col-sm-2">
-                                    <label for="basic-url">Pilih gambar</label>
-                                </div>
-                                <!-- <div class="col-sm-7  input-group input-group-sm">
-                                    <a href="" data-toggle="modal" data-target="#fotoModal" data-nm_jenis="customer" data-nama="Foto Dokumen" class=" badge badge-success clastombolfoto">...</a>
-
-                                </div> -->
-                                <div class="col-sm-7  input-group input-group-sm">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" name="is_sp" id="is_sp" accept=".jpg,.jpeg" required="required">
-                                        <label class="custom-file-label border border-primary" for="is_sp" required="required">Choose file</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group row row-table ml-1 mt-n2 mb-n2">
-                                <div class="col-sm-2">
-                                    <label for="basic-url">Keterangan</label>
-                                </div>
-                                <div class="col-sm-7  input-group input-group-sm">
-                                    <div class="custom-file">
-                                        <input type="text" class="form-control-sm border border-primary" id="txtket" name="txtket" autocomplete="off">
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </thead>
-            </table>
-        </div>
-    </div>
 
 
     <!-- -----------------------------------Data tables list barang detail---------------------------------------------- -->
@@ -162,7 +180,7 @@
                         $x = 0;
                         foreach ($konfirmasi_d as $mr) : ?>
                             <tr>
-                                <td><?= $mr['jumlah']; ?> <?= $mr['nm_satuan']; ?> <?= $mr['nm_barang']; ?>
+                                <td><?= rp($mr['jumlah']); ?> <?= $mr['nm_satuan']; ?> <?= $mr['nm_barang']; ?>
                                 </td>
                                 <td>
                                     <?php
@@ -203,7 +221,31 @@
 
 </body>
 </form>
+<!---------------------------------------------- Modal Email -------------------------------->
+<div class="modal fade" id="emailMenuModal" tabindex="-1" role="dialog" aria-labelledby="emailMenuModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="emailMenuModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
 
+            <div class="modal-body">
+                <div style="text-align:center;">
+                    <embed id="pdfscan" src="" type="application/pdf" width="1024" height="550" />
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+
+    </div>
+</div>
 <!-- ------------------------------------------------------------------Modal Foto------------------------------------------ -->
 
 <div class="modal fade" id="fotoModal" tabindex="-1" role="dialog" aria-labelledby="fotoModalLabel" aria-hidden="true">
@@ -299,6 +341,20 @@
     </div>
 </div>
 
+<!-- ------------------------------Modal Loading ------------------------------------------>
+<div class="modal fade" id="loadMe" tabindex="-1" role="dialog" aria-labelledby="loadMeLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <div class="loader"></div>
+                <div clas="loader-txt">
+                    <p>Proses sedang berjalan. <br><br><small>Mohon tunggu</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="<?= base_url('assets/'); ?>vendor/jquery/jquery.min.js"></script>
 <script src="<?= base_url('assets/'); ?>vendor/jquery/jquery.mask.js"></script>
 <script src="<?= base_url('assets/'); ?>vendor/datepicker/js/bootstrap-datepicker.min.js"></script>
@@ -318,6 +374,19 @@
 <!---------------------------------------------------- Date Picture-------------------------------------------- -->
 <script type="text/javascript">
     $(function() {
+
+        $('.clastombolemail').on('click', function() {
+            $('#emailMenuModalLabel').text($(this).data('email'));
+            $path = "<?= base_url('assets/bpb_temp/'); ?>" + $('#is_sp').val();
+            console.log($('#is_sp').val());
+            var parent = $('embed#pdfscan').parent();
+            var newImage = "<embed id=\"pdfscan\" src=\"" + $path + "\" type=\"image/jpeg\"  width=\"320\" />";
+            var newElement = $(newImage);
+            $('embed#pdfscan').remove();
+            parent.append(newElement);
+        });
+
+
         $('.tglpicker').datepicker({
             autoclose: true,
             todayHighlight: true,
@@ -327,21 +396,20 @@
         $('#tgl_awal').datepicker('setDate', new Date($('#tgl').val()));
 
         $('.clastombolfoto').on('click', function() {
-            //console.log($(this).data('id'));
-            $('#fotoModalLabel').text($(this).data('nama'));
-            // $.ajax({
-            //     url: "<?= base_url('input/insp_rutin/set_id_inspection_d'); ?>",
-            //     data: {
-            //         id: $(this).data('id'),
-            //         nm_file: $(this).data('nm_file'),
-            //         nm_jenis: $(this).data('nm_jenis')
-            //     },
-            //     method: "post",
-            //     dataType: 'json',
-            //     success: function(data) {
 
-            //     },
-            // });
+            $('#fotoModalLabel').text($(this).data('nama'));
+
+            $.ajax({
+                url: "<?= base_url('trans/bpb/set_session'); ?>",
+                data: {
+                    id: $('#id_transaksi').val()
+                },
+                method: "post",
+                dataType: 'json',
+                success: function(data) {
+
+                },
+            });
 
             $("#foto-area").show();
             Webcam.unfreeze();
@@ -374,13 +442,6 @@
     });
 </script>
 
-<!-------------------------------------- Pilih Rekanan & Barang-------------------------------------- -->
-<script type="text/javascript">
-    $('.custom-file-input').on('change', function() {
-        let fileName = $(this).val().split('\\').pop();
-        $(this).next('.custom-file-label').addClass("selected").html(fileName);
-    });
-</script>
 
 <script language="Javascript">
     $("#idsignature").hide();
@@ -454,10 +515,10 @@
         var data = signaturePad.toDataURL('image/png');
 
         //console.log(data);
-        Webcam.upload(data, '<?= base_url('input/insp_rutin/upload_list_inspeksi'); ?>', function(code, text) {});
+        Webcam.upload(data, '<?= base_url('trans/bpb/upload_bukti'); ?>', function(code, text) {});
         setTimeout(function() {
-            //url = "<?= base_url('input/insp_rutin/edit/'); ?>" + $('#id_inspection').val();
-            //window.location.replace(url);
+            url = "<?= base_url('trans/bpb/add2/'); ?>" + $('#id_transaksi').val();
+            window.location.replace(url);
             $("#target").submit();
         }, 3500);
     }
@@ -501,10 +562,5 @@
         // ganti display webcam dan simpan seperti semula
         document.getElementById('webcam').style.display = '';
         document.getElementById('simpan').style.display = 'none';
-    }
-
-    function openModalpenerima() {
-        $('#penerima-area').load("<?= base_url('input/insp_rutin/pilih_customer/edit'); ?>");
-        $('#penerimaModal').modal();
     }
 </script>

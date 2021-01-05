@@ -39,7 +39,7 @@ class Po_progress extends CI_Controller
         left join user c on a.id_user = c.id
         inner join m_company e on a.id_company = e.id_company
         inner join jns_bayar f on a.jenis_bayar = f.id
-        where a.tanggal  between '$startDate' and '$endDate' and a.is_voucher <> 1 and a.status <> 5
+        where a.tanggal  between '$startDate' and '$endDate' and (a.is_voucher <> 1 or a.status <> 5)
         order by a.tanggal";
             $data['kota'] = 'ALL';
         } else {

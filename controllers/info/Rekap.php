@@ -12,6 +12,7 @@ class Rekap extends CI_Controller
     {
         parent::__construct();
         is_logged_in();
+        $this->load->model("trans/po_model");
     }
 
 
@@ -61,5 +62,21 @@ class Rekap extends CI_Controller
         $this->load->view('templates/topbar', $data);
         $this->load->view('info/v_rekap', $data);
         // $this->load->view('templates/footer');
+    }
+
+
+    public function modal_po($id_transaksi)
+    {
+        $data['data_m'] = $this->po_model->konfirmasi_m($id_transaksi);
+        $data['data_d'] = $this->po_model->konfirmasi_d($id_transaksi);
+        $data['judul'] = "Data PO";
+        $this->load->view('info/v_rekap_modal_po', $data);
+    }
+    public function modal_spk($id_transaksi)
+    {
+        $data['data_m'] = $this->po_model->konfirmasi_m($id_transaksi);
+        $data['data_d'] = $this->po_model->konfirmasi_d($id_transaksi);
+        $data['judul'] = "Data SPK";
+        $this->load->view('info/v_rekap_modal_po', $data);
     }
 }
